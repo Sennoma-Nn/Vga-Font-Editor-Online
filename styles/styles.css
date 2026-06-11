@@ -1,20 +1,20 @@
 :root {
-    --vga-black: #000000;
-    --vga-blue: #0000AA;
-    --vga-green: #00AA00;
-    --vga-cyan: #00AAAA;
-    --vga-red: #AA0000;
-    --vga-magenta: #AA00AA;
-    --vga-brown: #AA5500;
-    --vga-light-gray: #AAAAAA;
-    --vga-dark-gray: #555555;
-    --vga-light-blue: #5555FF;
-    --vga-light-green: #55FF55;
-    --vga-light-cyan: #55FFFF;
-    --vga-light-red: #FF5555;
-    --vga-light-magenta: #FF55FF;
-    --vga-yellow: #FFFF55;
-    --vga-white: #FFFFFF;
+    --color-black: #000000;
+    --color-blue: #0000AA;
+    --color-green: #00AA00;
+    --color-cyan: #00AAAA;
+    --color-red: #AA0000;
+    --color-magenta: #AA00AA;
+    --color-brown: #AA5500;
+    --color-light-gray: #AAAAAA;
+    --color-dark-gray: #555555;
+    --color-light-blue: #5555FF;
+    --color-light-green: #55FF55;
+    --color-light-cyan: #55FFFF;
+    --color-light-red: #FF5555;
+    --color-light-magenta: #FF55FF;
+    --color-yellow: #FFFF55;
+    --color-white: #FFFFFF;
 }
 
 @font-face {
@@ -67,7 +67,7 @@ body {
     height: 100%;
     font-family: MBytePC230;
     font-size: 32px;
-    color: var(--vga-black);
+    color: var(--color-black);
     min-width: 1450px;
     min-height: 640px;
     user-select: none;
@@ -79,7 +79,7 @@ span {
 }
 
 .tabBar {
-    background-color: var(--vga-dark-gray);
+    background-color: var(--color-dark-gray);
     width: 100%;
     height: 32px;
     display: flex;
@@ -90,12 +90,12 @@ span {
 }
 
 .tabButtonWhiteBG {
-    background-color: var(--vga-white);
+    background-color: var(--color-white);
     display: flex;
 }
 
 .tabButtonDarkGrayBG {
-    background-color: var(--vga-dark-gray);
+    background-color: var(--color-dark-gray);
     display: flex;
 }
 
@@ -104,7 +104,7 @@ span {
 }
 
 .menuBar {
-    background-color: var(--vga-white);
+    background-color: var(--color-white);
     width: 100%;
     height: 32px;
     display: flex;
@@ -115,7 +115,7 @@ span {
 }
 
 bright {
-    color: var(--vga-yellow)
+    color: var(--color-yellow)
 }
 
 .menuButton {
@@ -128,27 +128,27 @@ bright {
     padding: 0 16px;
     margin: 0;
     font: inherit;
-    color: var(--vga-black);
+    color: var(--color-black);
     flex-shrink: 0;
 }
 
 .menuButton bright {
-    color: var(--vga-brown);
+    color: var(--color-brown);
 }
 
 .menuButton:hover {
-    background-color: var(--vga-light-gray);
+    background-color: var(--color-light-gray);
 }
 
 .menuButton:active,
 .menuButton.pressed {
-    background-color: var(--vga-dark-gray);
-    color: var(--vga-white);
+    background-color: var(--color-dark-gray);
+    color: var(--color-white);
 }
 
 .menuButton:active bright,
 .menuButton.pressed bright {
-    color: var(--vga-yellow);
+    color: var(--color-yellow);
 }
 
 .menuButtonDark {
@@ -161,28 +161,28 @@ bright {
     padding: 0 16px;
     margin: 0;
     font: inherit;
-    color: var(--vga-white);
+    color: var(--color-white);
     flex-shrink: 0;
 }
 
 .menuButtonDark bright {
-    color: var(--vga-yellow);
+    color: var(--color-yellow);
 }
 
 .menuButtonDark:hover {
-    background-color: var(--vga-light-gray);
-    color: var(--vga-black);
+    background-color: var(--color-light-gray);
+    color: var(--color-black);
 }
 
 .menuButtonDark:active,
 .menuButtonDark.pressed {
-    background-color: var(--vga-white);
-    color: var(--vga-black);
+    background-color: var(--color-white);
+    color: var(--color-black);
 }
 
 .menuButtonDark:active bright,
 .menuButtonDark.pressed bright {
-    color: var(--vga-brown);
+    color: var(--color-brown);
 }
 
 
@@ -199,7 +199,7 @@ bright {
     padding: 0px;
     margin: 0px;
     font: inherit;
-    color: var(--vga-white);
+    color: var(--color-white);
     position: relative;
     display: flex;
     align-items: center;
@@ -210,14 +210,14 @@ bright {
 
 .charButton:hover,
 .charButton.active {
-    background-color: var(--vga-light-gray);
-    color: var(--vga-black);
+    background-color: var(--color-light-gray);
+    color: var(--color-black);
 }
 
 .charButton:active,
 .charButton.active:active {
-    background-color: var(--vga-white);
-    color: var(--vga-black);
+    background-color: var(--color-white);
+    color: var(--color-black);
 }
 
 .charPreview {
@@ -248,7 +248,7 @@ bright {
 }
 
 .charArea {
-    background-color: var(--vga-dark-gray);
+    background-color: var(--color-dark-gray);
     width: 256px;
     height: 100%;
 }
@@ -266,43 +266,43 @@ bright {
 }
 
 .goto {
-    background-color: var(--vga-dark-gray);
+    background-color: var(--color-dark-gray);
     width: 100%;
     height: 32px;
     line-height: 32px;
-    color: var(--vga-white);
+    color: var(--color-white);
     display: flex;
 }
 
 .goto bright {
-    color: var(--vga-yellow);
+    color: var(--color-yellow);
 }
 
 .goto .menuButton {
-    color: var(--vga-white);
+    color: var(--color-white);
     width: 100%;
     text-align: left;
 }
 
 .goto .menuButton:hover {
-    background-color: var(--vga-light-gray);
-    color: var(--vga-black);
+    background-color: var(--color-light-gray);
+    color: var(--color-black);
 }
 
 .goto .menuButton:active,
 .goto .menuButton.pressed {
-    background-color: var(--vga-white);
-    color: var(--vga-black);
+    background-color: var(--color-white);
+    color: var(--color-black);
 }
 
 .goto .menuButton:hover bright,
 .goto .menuButton:active bright,
 .goto .menuButton.pressed bright {
-    color: var(--vga-brown);
+    color: var(--color-brown);
 }
 
 .canvasArea {
-    background-color: var(--vga-light-gray);
+    background-color: var(--color-light-gray);
     width: calc(100% - 64px);
     height: 100%;
 }
@@ -315,34 +315,34 @@ bright {
     line-height: 32px;
     margin: 0px 0px;
     padding: 32px;
-    background-color: var(--vga-magenta);
-    color: var(--vga-white);
+    background-color: var(--color-magenta);
+    color: var(--color-white);
     width: fit-content;
     height: fit-content;
     margin: 32px
 }
 
 .helpText .menuButton {
-    color: var(--vga-white);
+    color: var(--color-white);
 }
 
 .helpText .menuButton:hover {
-    background-color: var(--vga-light-magenta);
+    background-color: var(--color-light-magenta);
 }
 
 .helpText .menuButton:active,
 .helpText .menuButton.pressed {
-    background-color: var(--vga-white);
-    color: var(--vga-black);
+    background-color: var(--color-white);
+    color: var(--color-black);
 }
 
 .helpText .menuButton:active bright,
 .helpText .menuButton.pressed bright {
-    color: var(--vga-brown);
+    color: var(--color-brown);
 }
 
 .helpText bright {
-    color: var(--vga-yellow);
+    color: var(--color-yellow);
 }
 
 .helpText p {
@@ -350,11 +350,11 @@ bright {
 }
 
 .charTitle {
-    background-color: var(--vga-blue);
+    background-color: var(--color-blue);
     width: 100%;
     height: 32px;
     line-height: 32px;
-    color: var(--vga-white);
+    color: var(--color-white);
     display: flex;
     overflow-x: auto;
     overflow-y: hidden;
@@ -373,30 +373,30 @@ bright {
     padding: 0px 16px;
     margin: 0px;
     font: inherit;
-    color: var(--vga-white);
+    color: var(--color-white);
     flex-shrink: 0;
 }
 
 .TitleButton:hover {
-    background-color: var(--vga-light-blue);
+    background-color: var(--color-light-blue);
 }
 
 .TitleButton:active {
-    background-color: var(--vga-white);
-    color: var(--vga-black)
+    background-color: var(--color-white);
+    color: var(--color-black)
 }
 
 .TitleButton:active bright {
-    color: var(--vga-brown)
+    color: var(--color-brown)
 }
 
 .TitleButton.pressed {
-    background-color: var(--vga-white);
-    color: var(--vga-black);
+    background-color: var(--color-white);
+    color: var(--color-black);
 }
 
 .TitleButton.pressed bright {
-    color: var(--vga-brown);
+    color: var(--color-brown);
 }
 
 .pixelCanvas {
@@ -416,7 +416,7 @@ bright {
 
 .pixelCanvas,
 .helpText {
-    box-shadow: 32px 32px 0 0 var(--vga-dark-gray);
+    box-shadow: 32px 32px 0 0 var(--color-dark-gray);
 }
 
 .tabBar::-webkit-scrollbar,

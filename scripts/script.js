@@ -61,10 +61,11 @@ const isDirty = (tab = editorData.tab) => {
 };
 
 
+const isCharEmpty = (i, tab = editorData.tab) => !getFontData('data', tab)[i].includes('1');
+
 const isProjDirty = (tab = editorData.tab) => {
     for (let i = 0; i < getFontData('data', tab).length; i++) {
-        const str = getFontData('data', tab)[i];
-        if (str.includes('1')) return true;
+        if (!isCharEmpty(i, tab)) return true;
     }
     return false;
 };
@@ -89,8 +90,8 @@ function setEmptyData(h, tab) {
     setFontData('height', h, tab);
 
     const emptyData = getEmptyData(h);
-    editorData.clipboard.data = emptyData;
-    editorData.clipboard.height = h;
+    // editorData.clipboard.data = emptyData;
+    // editorData.clipboard.height = h;
 
     for (let i = 0; i <= 255; i++) {
         getFontData('data', tab)[i] = emptyData;
@@ -124,7 +125,7 @@ function askIsAbandon() {
             }
 
             abandonDiv.innerHTML = `
-                <span style="color: var(--vga-red)">&nbsp;${lang('WarnLost', '&nbsp;* Current will be lost!!!')}</span>
+                <span style="color: var(--color-red)">&nbsp;${lang('WarnLost', '&nbsp;* Current will be lost!!!')}</span>
                 <button class="menuButton" id="confirmYes">${lang('Yes', '<bright>Y</bright>es')}</button>
                 <button class="menuButton" id="confirmNo">${lang('No', '<bright>N</bright>o')}</button>
             `;
@@ -143,7 +144,7 @@ function askIsAbandon() {
 function showError(message) {
     const errorDiv = document.getElementById('warningArea');
     errorDiv.innerHTML = `
-        <span style="color: var(--vga-red)">&nbsp;* Error: ${message}</span>
+        <span style="color: var(--color-red)">&nbsp;* Error: ${message}</span>
     `;
     setTimeout(() => {
         if (errorDiv.innerText.includes('Error:')) errorDiv.innerHTML = '';
@@ -292,7 +293,7 @@ function updateTitle(isWarning = false) {
     const descriptions = getTabData('mode') === 'normal' || getTabData('mode') === 'edit'
         ? `
             <span>&nbsp;#${index}:&nbsp;</span>
-                <span style="color: var(--vga-light-gray)" title="${lang('CharDescriptions', charDescriptions, false)[index].replace(/"/g, '&quot;')}">
+                <span style="color: var(--color-light-gray)" title="${lang('CharDescriptions', charDescriptions, false)[index].replace(/"/g, '&quot;')}">
                     ${descriptionsText}
                 </span>
             <span>&nbsp;&nbsp;|&nbsp;</span>
@@ -300,7 +301,7 @@ function updateTitle(isWarning = false) {
 
     const saveTexts = isEditing() ? `
         <span>&nbsp;|&nbsp;&nbsp;</span>
-        <span style="color: var(${isWarning ? '--vga-brown' : '--vga-white'})">${isWarning ? '* ' : ''}${lang('SaveQ', 'Save?')}</span>
+        <span style="color: var(${isWarning ? '--color-brown' : '--color-white'})">${isWarning ? '* ' : ''}${lang('SaveQ', 'Save?')}</span>
         &nbsp;
         <button class="TitleButton" onclick="saveChanges()">${lang('Yes', '<bright>Y</bright>es')}</button>
         <button class="TitleButton" onclick="undoChanges()">${lang('No', '<bright>N</bright>o')}</button>
@@ -310,7 +311,16 @@ function updateTitle(isWarning = false) {
 
     switch (getTabData('mode')) {
         case 'normal':
-            actionButtons = `<button class="TitleButton" onclick="editChar()">${lang('Edit', '<bright>E</bright>dit')}</button>`;
+            const canPaste = isCharEmpty(getTabData('index'));
+            actionButtons = `
+                <button class="TitleButton" onclick="editChar()">${lang('Edit', '<bright>E</bright>dit')}</button>
+                <span>&nbsp;|&nbsp;</span>
+                <button class="TitleButton" onclick="layerCopy()">${lang('Copy', '<bright>C</bright>opy')}</button>
+                ${canPaste
+                    ? `<button class="TitleButton" onclick="layerPaste()">${lang('Paste', '<bright>P</bright>aste')}</button>`
+                    : `<span style="color:var(--color-dark-gray)">&nbsp;${lang('Paste', '<bright>P</bright>aste')}&nbsp;</span>`
+                }
+            `;
             break;
         case 'edit':
             actionButtons = `
@@ -462,27 +472,38 @@ function shiftRight() {
 }
 
 function layerCopy() {
-    editorData.clipboard.data = getTabData('changedData');
+    if (isEditing()) {
+        editorData.clipboard.data = getTabData('changedData');
+    } else {
+        editorData.clipboard.data = getFontData('data')[getTabData('index')];
+    }
     editorData.clipboard.height = getFontData('height');
 }
 
 function layerPaste() {
+    if (!isEditing()) {
+        setTabData('mode', 'edit');
+    }
+
     let layerHeight = getFontData('height');
 
     if (layerHeight === editorData.clipboard.height) {
         setTabData('changedData', editorData.clipboard.data);
         renderCanvas();
+        updateTitle();
     } else if (layerHeight > editorData.clipboard.height) {
         let newData = editorData.clipboard.data.padEnd(8 * layerHeight, '0');
 
         setTabData('changedData', newData);
         renderCanvas();
+        updateTitle();
         editShift();
     } else {
         let truncated = editorData.clipboard.data.slice(0, 8 * layerHeight);
 
         setTabData('changedData', truncated);
         renderCanvas();
+        updateTitle();
     }
 }
 
@@ -539,7 +560,7 @@ function renderCanvas() {
 
     let pixelsHTML = '';
     for (let i = 0; i < charData.length; i++) {
-        const color = Number(charData[i]) ? 'var(--vga-black)' : 'var(--vga-white)';
+        const color = Number(charData[i]) ? 'var(--color-black)' : 'var(--color-white)';
         pixelsHTML += `<div class="pixel" 
             style="background-color: ${color}; width: ${wh}px; height: ${wh}px" 
             onmousedown="pixelInput(${i}, event)" 
@@ -551,13 +572,13 @@ function renderCanvas() {
 
 function updatePreviews(i) {
     const preview = document.getElementById(`prev${i}`);
-    const charData = getFontData('data')[i];
     const h = getFontData('height');
-    const isEmpty = !charData.includes('1');
+    const isEmpty = isCharEmpty(i);
 
     if (isEmpty) {
         preview.innerHTML = '';
     } else {
+        const charData = getFontData('data')[i];
         preview.style.gridTemplateRows = `repeat(${h}, 2px)`;
 
         let pixelsHTML = '';
@@ -585,7 +606,7 @@ function pixelInput(i, e) {
     dataArr[i] = newValue;
     setTabData('changedData', dataArr.join(''));
 
-    e.target.style.backgroundColor = newValue === "1" ? 'var(--vga-black)' : 'var(--vga-white)';
+    e.target.style.backgroundColor = newValue === "1" ? 'var(--color-black)' : 'var(--color-white)';
 }
 
 function editChar() {
