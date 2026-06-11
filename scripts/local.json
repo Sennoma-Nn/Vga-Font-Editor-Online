@@ -2,6 +2,7 @@
     "zh-cn": {
         "UiFont": "MBytePC230, Unifont",
         "New16": "新建(8x1<bright>6</bright>)",
+        "New14": "新建(8x1<bright>4</bright>)",
         "New8": "新建(8x<bright>8</bright>)",
         "Rename": "重命名(<bright>R</bright>)",
         "Open": "打开(<bright>O</bright>)",
@@ -287,6 +288,7 @@
     "zh-tw": {
         "UiFont": "MBytePC230, UnifontTW",
         "New16": "新建(8x1<bright>6</bright>)",
+        "New14": "新建(8x1<bright>4</bright>)",
         "New8": "新建(8x<bright>8</bright>)",
         "Rename": "重命名(<bright>R</bright>)",
         "Open": "開啟(<bright>O</bright>)",
@@ -572,6 +574,7 @@
     "ja": {
         "UiFont": "MBytePC230, UnifontJP",
         "New16": "新規(8x1<bright>6</bright>)",
+        "New14": "新規(8x1<bright>4</bright>)",
         "New8": "新規(8x<bright>8</bright>)",
         "Rename": "リネーム(<bright>R</bright>)",
         "Open": "開く(<bright>O</bright>)",
