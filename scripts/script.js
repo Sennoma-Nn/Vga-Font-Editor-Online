@@ -90,8 +90,11 @@ function setEmptyData(h, tab) {
     setFontData('height', h, tab);
 
     const emptyData = getEmptyData(h);
-    // editorData.clipboard.data = emptyData;
-    // editorData.clipboard.height = h;
+
+    if (isNaN(editorData.clipboard.height)) {
+        editorData.clipboard.data = emptyData;
+        editorData.clipboard.height = h;
+    }
 
     for (let i = 0; i <= 255; i++) {
         getFontData('data', tab)[i] = emptyData;
