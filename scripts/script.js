@@ -301,10 +301,10 @@ function updateMenu() {
             actionButtons = `
                 <button class="menuButton" onclick="menuCancelNew()">${lang('CancelNew', 'Cancel ne<bright>w</bright>')}</button>
                 <span>&nbsp;|&nbsp;</span>
-                <span>Size:&nbsp;</span>
-                <button class="menuButton" onclick="menuNewButton(16)">${lang('New16', '8x1<bright>6</bright>,')}</button>
-                <button class="menuButton" onclick="menuNewButton(14)">${lang('New14', '8x1<bright>4</bright>,')}</button>
-                <button class="menuButton" onclick="menuNewButton(8)">${lang('New8', '8x<bright>8</bright>')}</button>
+                <span>${lang('Size', 'Size')}:&nbsp;</span>
+                <button class="menuButton" onclick="menuNewButton(16)">8x1<bright>6</bright>,</button>
+                <button class="menuButton" onclick="menuNewButton(14)">8x1<bright>4</bright>,</button>
+                <button class="menuButton" onclick="menuNewButton(8)">8x<bright>8</bright></button>
             `;
             break;
     }
