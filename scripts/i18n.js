@@ -2,7 +2,7 @@ let currentLangData = {}
 
 function lang(key, defaultValue, callUni = true) {
     let r = currentLangData[key] || defaultValue;
-    if (callUni) return toUni(r);
+    if (callUni) return toUniTag(r);
     return r;
 }
 
@@ -18,7 +18,7 @@ async function loadLanguage() {
 
 }
 
-function toUni(str) {
+function toUniTag(str) {
     let whiteList = `☺☻♥♦♣♠•◘○◙♂♀♪♫☼►◄↕‼¶§▬↨↑↓→←∟↔▲▼ !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_\`abcdefghijklmnopqrstuvwxyz{|}~⌂ÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜ¢£¥₧ƒáíóúñÑªº¿⌐¬½¼¡«»░▒▓│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌█▄▌▐▀αßΓπΣσµτΦΘΩδ∞φε∩≡±≥≤⌠⌡÷≈°∙·√ⁿ²■\u00A0`;
     whiteList += '\r\n\t\v\h'
     const escapedList = whiteList.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

@@ -1,11 +1,5 @@
 (async () => {
     await loadLanguage();
-    document.getElementById('new16Button').innerHTML = lang('New16', 'New (8x1<bright>6</bright>)');
-    document.getElementById('new14Button').innerHTML = lang('New14', 'New (8x1<bright>4</bright>)');
-    document.getElementById('new8Button').innerHTML = lang('New8', 'New (8x<bright>8</bright>)');
-    document.getElementById('renameButton').innerHTML = lang('Rename', '<bright>R</bright>ename');
-    document.getElementById('openButton').innerHTML = lang('Open', '<bright>O</bright>pen');
-    document.getElementById('saveButton').innerHTML = lang('Save', '<bright>S</bright>ave');
 
     document.getElementById('gotoButtonText').innerHTML = lang('Goto', '<bright>G</bright>oto:');
     document.getElementById('stringInput').innerHTML = '__';
@@ -42,8 +36,9 @@
         container.insertAdjacentHTML('beforeend', lang('HelpBlock', defaultHelp));
     }
 
-    setEmptyData(16);
     updateTabs();
+    updateMenu();
+    setEmptyData(16);
 })();
 
 window.addEventListener('beforeunload', (event) => {

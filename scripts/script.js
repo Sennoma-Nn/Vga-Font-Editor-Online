@@ -1,5 +1,6 @@
 let editorData = {
     tab: 0,
+    menuMode: 'normal',
     tabsData: [
         {
             name: 'UNTITLED.RAW',
@@ -121,7 +122,7 @@ async function resetCharsData(h) {
 function askIsAbandon() {
     return new Promise((resolve) => {
         if (isProjDirty()) {
-            const abandonDiv = document.getElementById('warningArea');
+            const abandonDiv = document.getElementById('menuBarWarningArea');
             if (abandonDiv.querySelector('.menuButton')) {
                 resolve(false);
                 return;
@@ -129,7 +130,7 @@ function askIsAbandon() {
 
             abandonDiv.innerHTML = `
                 <span style="color: var(--color-red)">&nbsp;${lang('WarnLost', '&nbsp;* Current will be lost!!!')}</span>
-                <button class="menuButton" id="confirmYes">${lang('Yes', '<bright>Y</bright>es')}</button>
+                <button class="menuButton" id="confirmYes">${lang('Yes', '<bright>Y</bright>es,')}</button>
                 <button class="menuButton" id="confirmNo">${lang('No', '<bright>N</bright>o')}</button>
             `;
 
@@ -145,7 +146,7 @@ function askIsAbandon() {
 }
 
 function showError(message) {
-    const errorDiv = document.getElementById('warningArea');
+    const errorDiv = document.getElementById('menuBarWarningArea');
     errorDiv.innerHTML = `
         <span style="color: var(--color-red)">&nbsp;* Error: ${message}</span>
     `;
@@ -282,15 +283,44 @@ function truncateText(text) {
     return text;
 }
 
+function updateMenu() {
+    const menuBarButtonArea = document.getElementById('menuBarButtonArea');
+
+    let actionButtons = '';
+
+    switch (editorData.menuMode) {
+        case 'normal':
+            actionButtons = `
+                <button class="menuButton" onclick="menuNew()">${lang('New', 'Ne<bright>w</bright>')}</button>
+                <button class="menuButton" onclick="renameFont()">${lang('Rename', '<bright>R</bright>ename')}</button>
+                <button class="menuButton" onclick="openFont()">${lang('Open', '<bright>O</bright>pen')}</button>
+                <button class="menuButton" onclick="saveFont()">${lang('Save', '<bright>S</bright>ave')}</button>
+            `;
+            break;
+        case 'new':
+            actionButtons = `
+                <button class="menuButton" onclick="menuCancelNew()">${lang('CancelNew', 'Cancel ne<bright>w</bright>')}</button>
+                <span>&nbsp;|&nbsp;</span>
+                <span>Size:&nbsp;</span>
+                <button class="menuButton" onclick="menuNewButton(16)">${lang('New16', '8x1<bright>6</bright>,')}</button>
+                <button class="menuButton" onclick="menuNewButton(14)">${lang('New14', '8x1<bright>4</bright>,')}</button>
+                <button class="menuButton" onclick="menuNewButton(8)">${lang('New8', '8x<bright>8</bright>')}</button>
+            `;
+            break;
+    }
+
+    menuBarButtonArea.innerHTML = actionButtons;
+}
+
 function updateTitle(isWarning = false) {
     const index = getTabData('index');
     const charTitle = document.getElementById('charTitle');
 
     let descriptionsText = '';
     if (getTabData('mode') === 'normal') {
-        descriptionsText = toUni(truncateText(lang('CharDescriptions', charDescriptions, false)[index]));
+        descriptionsText = toUniTag(truncateText(lang('CharDescriptions', charDescriptions, false)[index]));
     } else if (getTabData('mode') === 'edit') {
-        descriptionsText = toUni((lang('CharDescriptions', charDescriptions, false)[index]).split(' - ')[0].trim());
+        descriptionsText = toUniTag((lang('CharDescriptions', charDescriptions, false)[index]).split(' - ')[0].trim());
     }
 
     const descriptions = getTabData('mode') === 'normal' || getTabData('mode') === 'edit'
@@ -306,11 +336,11 @@ function updateTitle(isWarning = false) {
         <span>&nbsp;|&nbsp;&nbsp;</span>
         <span style="color: var(${isWarning ? '--color-brown' : '--color-white'})">${isWarning ? '* ' : ''}${lang('SaveQ', 'Save?')}</span>
         &nbsp;
-        <button class="TitleButton" onclick="saveChanges()">${lang('Yes', '<bright>Y</bright>es')}</button>
+        <button class="TitleButton" onclick="saveChanges()">${lang('Yes', '<bright>Y</bright>es,')}</button>
         <button class="TitleButton" onclick="undoChanges()">${lang('No', '<bright>N</bright>o')}</button>
     ` : '';
 
-    let actionButtons;
+    let actionButtons = '';
 
     switch (getTabData('mode')) {
         case 'normal':
@@ -365,6 +395,21 @@ function updateTitle(isWarning = false) {
     charTitle.innerHTML = `
         ${descriptions}${actionButtons}${saveTexts}
     `;
+}
+
+function menuCancelNew() {
+    editorData.menuMode = 'normal';
+    updateMenu();
+}
+
+function menuNew() {
+    editorData.menuMode = 'new';
+    updateMenu();
+}
+
+function menuNewButton(h) {
+    resetCharsData(h);
+    menuCancelNew();
 }
 
 function transformFlipHorizontal() {
@@ -724,7 +769,7 @@ function gotoInputStart() {
 }
 
 function changeTab(tab) {
-    const warningDiv = document.getElementById('warningArea');
+    const warningDiv = document.getElementById('menuBarWarningArea');
     const confirmNoBtn = warningDiv ? warningDiv.querySelector('#confirmNo') : null;
     if (confirmNoBtn) {
         confirmNoBtn.click();

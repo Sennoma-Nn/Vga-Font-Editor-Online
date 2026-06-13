@@ -114,6 +114,15 @@ span {
     scrollbar-width: none;
 }
 
+.menuBarButtonArea,
+.menuBarWarningArea {
+    flex-shrink: 0;
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+}
+
 bright {
     color: var(--color-yellow)
 }
