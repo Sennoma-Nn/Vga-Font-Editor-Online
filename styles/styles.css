@@ -37,13 +37,8 @@
 }
 
 @font-face {
-    font-family: 'Unifont';
-    src: url('../fonts/Unifont.otf') format('opentype');
-}
-
-@font-face {
-    font-family: 'Unifont';
-    src: url('../fonts/Unifont.otf') format('opentype');
+    font-family: 'ZLabsRoundPix';
+    src: url('../fonts/ZLabsRoundPix_16px_M_CN.ttf') format('opentype');
 }
 
 @font-face {
@@ -52,14 +47,13 @@
 }
 
 @font-face {
-    font-family: 'UnifontJP';
-    src: url('../fonts/UnifontJP.otf') format('opentype');
+    font-family: 'ZhengGeDianHei';
+    src: url('../fonts/ZhengGeDianHei-16.ttf') format('truetype');
 }
 
-uni {
+full-width {
     display: inline-block;
     position: relative;
-    top: 4px;
 }
 
 html,

@@ -329,9 +329,9 @@ function updateTitle(isWarning = false) {
 
     let descriptionsText = '';
     if (getTabData('mode') === 'normal') {
-        descriptionsText = toUniTag(truncateText(lang('CharDescriptions', charDescriptions, false)[index]));
+        descriptionsText = toFullWidthTag(truncateText(lang('CharDescriptions', charDescriptions, false)[index]));
     } else if (getTabData('mode') === 'edit') {
-        descriptionsText = toUniTag((lang('CharDescriptions', charDescriptions, false)[index]).split(' - ')[0].trim());
+        descriptionsText = toFullWidthTag((lang('CharDescriptions', charDescriptions, false)[index]).split(' - ')[0].trim());
     }
 
     const descriptions = getTabData('mode') === 'normal' || getTabData('mode') === 'edit'
