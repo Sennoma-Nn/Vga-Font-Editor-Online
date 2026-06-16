@@ -103,6 +103,7 @@ function setEmptyData(h, tab) {
 
     openChar(getTabData('index'), true);
     updateAllPreviews();
+    updatePreviewCanvas()
 }
 
 async function resetCharsData(h) {
@@ -206,6 +207,7 @@ async function openFont() {
         openChar(getTabData('index'), true);
         fileInput.value = '';
         updateTabs();
+        updatePreviewCanvas()
     };
 }
 
@@ -263,6 +265,14 @@ async function saveFont() {
     URL.revokeObjectURL(url);
 }
 
+function previewFont() {
+    updatePreviewCanvas();
+    const previewDiv = document.getElementById('preview');
+    if (previewDiv.style.display === 'none' || previewDiv.style.display === '') {
+        previewDiv.style.display = 'block';
+    } else previewDiv.style.display = 'none'
+}
+
 function renameFont() {
     if (editorData.inputmode === 'goto') cancelGoto();
 
@@ -295,6 +305,7 @@ function updateMenu() {
                 <button class="menuButton" onclick="renameFont()">${lang('Rename', '<bright>R</bright>ename')}</button>
                 <button class="menuButton" onclick="openFont()">${lang('Open', '<bright>O</bright>pen')}</button>
                 <button class="menuButton" onclick="saveFont()">${lang('Save', '<bright>S</bright>ave')}</button>
+                <button class="menuButton" onclick="previewFont()">${lang('Preview', 'Pre<bright>v</bright>iew')}</button>
             `;
             break;
         case 'new':
@@ -368,16 +379,16 @@ function updateTitle(isWarning = false) {
                 <span>&nbsp;|&nbsp;</span>
                 <button class="TitleButton" onclick="layerCopy()">${lang('Copy', '<bright>C</bright>opy')}</button>
                 <button class="TitleButton" onclick="layerPaste()">${lang('Paste', '<bright>P</bright>aste')}</button>
-                <button class="TitleButton" onclick="layerClear()">${lang('Clear', 'Cle<bright>a</bright>r')}</button>
+                <button class="TitleButton" onclick="layerClear()">${lang('Reset', 'R<bright>e</bright>set')}</button>
             `;
             break;
         case 'transform':
             actionButtons = `
                 <button class="TitleButton" onclick="editBack()">${lang('Back', '<bright>B</bright>ack')}</button>
                 <span>&nbsp;|&nbsp;</span>
-                <button class="TitleButton" onclick="transformReverse()">${lang('Reverse', 'Re<bright>v</bright>erse')}</button>
+                <button class="TitleButton" onclick="transformReverse()">${lang('Reverse', 'R<bright>e</bright>verse')}</button>
                 <button class="TitleButton" onclick="transformFlipHorizontal()">${lang('FlipH', '<bright>F</bright>lip(↔)')}</button>
-                <button class="TitleButton" onclick="transformFlipVertical()">${lang('FlipV', 'Fl<bright>i</bright>p(↕)')}</button>
+                <button class="TitleButton" onclick="transformFlipVertical()">${lang('FlipV', 'F<bright>l</bright>ip(↕)')}</button>
             `;
             break;
         case 'shift':
@@ -395,6 +406,117 @@ function updateTitle(isWarning = false) {
     charTitle.innerHTML = `
         ${descriptions}${actionButtons}${saveTexts}
     `;
+}
+
+const getCSSVar = (varName) => getComputedStyle(document.documentElement).getPropertyValue(`--${varName}`).trim();
+
+function drawChar(ctx, i, x, y, fh) {
+    const charData = getFontData('data')[i];
+    if (!charData) return;
+
+    const offsetX = (x - 1) * 8 * 2;
+    const offsetY = (y - 1) * fh * 2;
+
+    ctx.fillStyle = getCSSVar('color-white');
+
+    for (let yy = 0; yy < fh; yy++) {
+        for (let xx = 0; xx < 8; xx++) {
+            const bitIndex = yy * 8 + xx;
+            if (charData[bitIndex] === '1') {
+                ctx.fillRect(offsetX + xx * 2, offsetY + yy * 2, 2, 2);
+            }
+        }
+    }
+}
+
+function drawStr(ctx, str, x, y, fh) {
+    for (let c = 0; c < str.length; c++) {
+        drawChar(ctx, str.charCodeAt(c), x + c, y, fh);
+    }
+}
+
+function drawArr(ctx, arr, x, y, fh) {
+    for (let c = 0; c < arr.length; c++) {
+        drawChar(ctx, arr[c], x + c, y, fh);
+    }
+}
+
+function drawGrid(ctx, grid, x, y, fh) {
+    for (let line = 0; line < grid.length; line++) {
+        const row = grid[line];
+        if (typeof row === 'string') {
+            drawStr(ctx, row, x, y + line, fh);
+        } else {
+            drawArr(ctx, row, x, y + line, fh);
+        }
+    }
+}
+
+function updatePreviewCanvas() {
+    const canvas = document.getElementById('previewCanvas')
+    canvas.width = 1280;
+    canvas.height = 32 * (25 - 2);
+
+    const ctx = canvas.getContext('2d');
+    const fontHeight = getFontData('height');
+
+    ctx.fillStyle = getCSSVar('color-dark-gray');
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = 0; i < 256; i++) {
+        const y = Math.floor(i / 64);
+        const x = i % 64;
+        const sx = Math.floor(x / 8) * 2;
+        const tx = 2 + x + sx;
+        const r = 2 + y;
+
+        drawChar(ctx, i, tx, r, fontHeight)
+    }
+
+    const testBox = [
+        [0xDA, 0xC4, 0xC2, 0xC4, 0xBF, 0x20, 0xC9, 0xCD, 0xCB, 0xCD, 0xBB, 0x20, 0xD5, 0xCD, 0xD1, 0xCD, 0xB8, 0x20, 0xD6, 0xC4, 0xD2, 0xC4, 0xB7],
+        [0xC3, 0xC4, 0xC5, 0xC4, 0xB4, 0x20, 0xCC, 0xCD, 0xCE, 0xCD, 0xB9, 0x20, 0xC6, 0xCD, 0xD8, 0xCD, 0xB5, 0x20, 0xC7, 0xC4, 0xD7, 0xC4, 0xB6],
+        [0xC0, 0xC4, 0xC1, 0xC4, 0xD9, 0x20, 0xC8, 0xCD, 0xCA, 0xCD, 0xBC, 0x20, 0xD4, 0xCD, 0xCF, 0xCD, 0xBE, 0x20, 0xD3, 0xC4, 0xD0, 0xC4, 0xBD]
+    ]
+
+    drawGrid(ctx, testBox, 2, 7, fontHeight);
+
+    const testMath = [
+        [0xF4, 0xE3, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0xE3],
+        [0xB3, 0x20, 0x20, 0x73, 0x69, 0x6E, 0xFD, 0x20, 0xE9, 0x20, 0x64, 0xE9, 0x20, 0x3D, 0x20, 0x2D],
+        [0xF5, 0x30, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x32],
+    ]
+
+    drawGrid(ctx, testMath, 27, 7, fontHeight);
+
+    const testEnglish = [
+        'A Quick Brown Fox Jumps Over The Lazy Dog',
+        'a quick brown fox jumps over the lazy dog',
+        'A QUICK BROWN FOX JUMPS OVER THE LAZY DOG',
+    ];
+
+    drawGrid(ctx, testEnglish, 2, 11, fontHeight);
+
+    const testCode = [
+        '1 #include <stdio.h>',
+        '2 ',
+        '3 int main() {',
+        '4     char text[] = "Test Display";',
+        '5     printf("%s\\n", text);',
+        '6     return 0;',
+        '7 }'
+    ];
+
+    for (let line = 0; line < testCode.length; line++) {
+        drawChar(ctx, 0xB3, 44, 7 + line, fontHeight);
+    }
+    drawGrid(ctx, testCode, 46, 7, fontHeight);
+
+    const testPrice = [
+        0x9C, 0x39, 0x2E, 0x31, 0x35, 0x20, 0x24, 0x38, 0x2E, 0x32, 0x34, 0x20, 0x9B, 0x37, 0x2E,
+        0x33, 0x33, 0x20, 0x9D, 0x36, 0x2E, 0x34, 0x32, 0x20, 0x9E, 0x35, 0x2E, 0x35, 0x31,
+    ];
+    drawArr(ctx, testPrice, 2, 16, fontHeight);
 }
 
 function menuCancelNew() {
@@ -618,7 +740,7 @@ function renderCanvas() {
     canvas.innerHTML = pixelsHTML;
 }
 
-function updatePreviews(i) {
+function updatePreviewCanvass(i) {
     const preview = document.getElementById(`prev${i}`);
     const h = getFontData('height');
     const isEmpty = isCharEmpty(i);
@@ -640,7 +762,7 @@ function updatePreviews(i) {
 
 function updateAllPreviews() {
     for (let i = 0; i < 256; i++) {
-        updatePreviews(i);
+        updatePreviewCanvass(i);
     }
 }
 
@@ -668,7 +790,7 @@ function saveChanges() {
     getFontData('data')[getTabData('index')] = getTabData('changedData');
     setTabData('mode', 'normal');
 
-    updatePreviews(getTabData('index'));
+    updatePreviewCanvass(getTabData('index'));
     renderCanvas();
     updateTitle();
 }
@@ -770,6 +892,8 @@ function gotoInputStart() {
 
 function changeTab(tab) {
     const warningDiv = document.getElementById('menuBarWarningArea');
+    const previewDiv = document.getElementById('preview');
+
     const confirmNoBtn = warningDiv ? warningDiv.querySelector('#confirmNo') : null;
     if (confirmNoBtn) {
         confirmNoBtn.click();
@@ -781,6 +905,10 @@ function changeTab(tab) {
     updateAllPreviews();
     openChar(getTabData('index'), false, true);
     updateTabs();
+
+    if (!(previewDiv.style.display === 'none' || previewDiv.style.display === '')) {
+        updatePreviewCanvas();
+    }
 }
 
 function addTab() {

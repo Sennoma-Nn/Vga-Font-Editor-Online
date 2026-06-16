@@ -15,6 +15,9 @@
     --color-light-magenta: #FF55FF;
     --color-yellow: #FFFF55;
     --color-white: #FFFFFF;
+
+    --web-min-width: 1450px;
+    --web-min-height: 640px;
 }
 
 @font-face {
@@ -68,8 +71,8 @@ body {
     font-family: MBytePC230;
     font-size: 32px;
     color: var(--color-black);
-    min-width: 1450px;
-    min-height: 640px;
+    min-width: var(--web-min-width);
+    min-height: var(--web-min-height);
     user-select: none;
 }
 
@@ -433,4 +436,24 @@ bright {
 .charTitle::-webkit-scrollbar,
 .charButtonArea::-webkit-scrollbar {
     width: 0 !important
+}
+
+.preview {
+    position: absolute;
+    top: 64px;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 64px);
+    min-width: var(--web-min-width);
+    min-height: calc(var(--web-min-height) - 64px);
+    background-color: var(--color-dark-gray);
+    z-index: 9999;
+    display: none
+}
+
+.previewCanvas {
+    width: calc(16px * 80);
+    height: calc(32px * (25 - 2));
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
 }
