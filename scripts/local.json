@@ -592,7 +592,7 @@
         "CancelLoadTemplates": "取消(<bright>M</bright>)",
         "Size": "大小",
         "Select": "選擇",
-        "Rename": "重命名(<bright>M</bright>)",
+        "Rename": "重新命名(<bright>M</bright>)",
         "Open": "開啟(<bright>O</bright>)",
         "Save": "儲存(<bright>S</bright>)",
         "Preview": "預覽(<bright>V</bright>)",
@@ -614,7 +614,7 @@
         "WarnLost": "* 目前編輯將會遺失！！！",
         "ErrorFont": "字型數據錯誤！",
         "ErrorFetch": "從 URL 獲取字型失敗！",
-        "HelpBlock": "<div class=\"help-text\" id=\"help-text\"><p>╔═ 說明 ═════════╗</p><p>║ 點擊編輯按鈕， ║</p><p>║ 編輯当前字元。 ║</p><p>║ 滑鼠左鍵塗色， ║</p><p>║ 滑鼠右鍵擦除。 ║</p><p>╚════<button class=\"menu-button\" id=\"closeHelpBtn\" onclick=\"helpDisenable()\">知道了(<bright>K</bright>)</button>═╝</p></div>",
+        "HelpBlock": "<div class=\"help-text\" id=\"help-text\"><p>╔═ 說明 ═════════╗</p><p>║ 點擊編輯按鈕， ║</p><p>║ 編輯目前字元。 ║</p><p>║ 滑鼠左鍵塗色， ║</p><p>║ 滑鼠右鍵擦除。 ║</p><p>╚════<button class=\"menu-button\" id=\"closeHelpBtn\" onclick=\"helpDisenable()\">知道了(<bright>K</bright>)</button>═╝</p></div>",
         "TruncateTextMaxLen": "16",
         "CharDescriptions": [
             "NUL (空字元)",
