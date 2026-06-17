@@ -130,9 +130,9 @@ function askIsAbandon() {
             }
 
             abandonDiv.innerHTML = `
-                <span style="color: var(--color-red)">&nbsp;${lang('WarnLost', '&nbsp;* Current will be lost!!!')}</span>
-                <button class="menuButton" id="confirmYes">${lang('Yes', '<bright>Y</bright>es,')}</button>
-                <button class="menuButton" id="confirmNo">${lang('No', '<bright>N</bright>o')}</button>
+                <span style="color: var(--color-red)">&nbsp;${lang('WarnLost')}</span>
+                <button class="menuButton" id="confirmYes">${lang('Yes')}</button>
+                <button class="menuButton" id="confirmNo">${lang('No')}</button>
             `;
 
             const handleChoice = (choice) => {
@@ -185,13 +185,13 @@ async function openFont() {
 
         let charLen = result.length / 256;
         if (charLen % 1 !== 0) {
-            showError(lang('ErrorFont', "Font data error!"));
+            showError(lang('ErrorFont'));
             return;
         }
 
         let fontHeight = charLen / 8;
         if (!(fontHeight > 0 && fontHeight <= 32)) {
-            showError(lang('ErrorFont', "Font data error!"));
+            showError(lang('ErrorFont'));
             return;
         }
         setFontData('height', fontHeight);
@@ -285,14 +285,6 @@ function debug() {
     console.log(editorData);
 }
 
-function truncateText(text) {
-    const maxLen = Number(lang('TruncateTextMaxLen', '32'));
-    if (text.length > maxLen) {
-        return text.slice(0, maxLen).trim() + '...';
-    }
-    return text;
-}
-
 function updateMenu() {
     const menuBarButtonArea = document.getElementById('menuBarButtonArea');
 
@@ -301,18 +293,18 @@ function updateMenu() {
     switch (editorData.menuMode) {
         case 'normal':
             actionButtons = `
-                <button class="menuButton" onclick="menuNew()">${lang('New', 'Ne<bright>w</bright>')}</button>
-                <button class="menuButton" onclick="renameFont()">${lang('Rename', '<bright>R</bright>ename')}</button>
-                <button class="menuButton" onclick="openFont()">${lang('Open', '<bright>O</bright>pen')}</button>
-                <button class="menuButton" onclick="saveFont()">${lang('Save', '<bright>S</bright>ave')}</button>
-                <button class="menuButton" onclick="previewFont()">${lang('Preview', 'Pre<bright>v</bright>iew')}</button>
+                <button class="menuButton" onclick="menuNew()">${lang('New')}</button>
+                <button class="menuButton" onclick="renameFont()">${lang('Rename')}</button>
+                <button class="menuButton" onclick="openFont()">${lang('Open')}</button>
+                <button class="menuButton" onclick="saveFont()">${lang('Save')}</button>
+                <button class="menuButton" onclick="previewFont()">${lang('Preview')}</button>
             `;
             break;
         case 'new':
             actionButtons = `
-                <button class="menuButton" onclick="menuCancelNew()">${lang('CancelNew', 'Cancel ne<bright>w</bright>')}</button>
+                <button class="menuButton" onclick="menuCancelNew()">${lang('CancelNew')}</button>
                 <span>&nbsp;|&nbsp;</span>
-                <span>${lang('Size', 'Size')}:&nbsp;</span>
+                <span>${lang('Size')}:&nbsp;</span>
                 <button class="menuButton" onclick="menuNewButton(16)">8x1<bright>6</bright>,</button>
                 <button class="menuButton" onclick="menuNewButton(14)">8x1<bright>4</bright>,</button>
                 <button class="menuButton" onclick="menuNewButton(8)">8x<bright>8</bright></button>
@@ -323,21 +315,35 @@ function updateMenu() {
     menuBarButtonArea.innerHTML = actionButtons;
 }
 
+function truncateText(text) {
+    const maxLen = Number(lang('TruncateTextMaxLen'));
+    if (text.length > maxLen) {
+        return text.slice(0, maxLen).trim() + '...';
+    }
+    return text;
+}
+
+function shortName(text) {
+    if (text.indexOf(' - ') !== -1) return text.split(' - ')[0].trim()
+    if (text.indexOf(' (') !== -1) return text.split(' (')[0].trim()
+    return text;
+}
+
 function updateTitle(isWarning = false) {
     const index = getTabData('index');
     const charTitle = document.getElementById('charTitle');
 
     let descriptionsText = '';
     if (getTabData('mode') === 'normal') {
-        descriptionsText = toFullWidthTag(truncateText(lang('CharDescriptions', charDescriptions, false)[index]));
+        descriptionsText = toFullWidthTag(truncateText(lang('CharDescriptions', false)[index]));
     } else if (getTabData('mode') === 'edit') {
-        descriptionsText = toFullWidthTag((lang('CharDescriptions', charDescriptions, false)[index]).split(' - ')[0].trim());
+        descriptionsText = toFullWidthTag(shortName((lang('CharDescriptions', false)[index])));
     }
 
     const descriptions = getTabData('mode') === 'normal' || getTabData('mode') === 'edit'
         ? `
             <span>&nbsp;#${index}:&nbsp;</span>
-                <span style="color: var(--color-light-gray)" title="${lang('CharDescriptions', charDescriptions, false)[index].replace(/"/g, '&quot;')}">
+                <span style="color: var(--color-light-gray)" title="${lang('CharDescriptions', false)[index].replace(/"/g, '&quot;')}">
                     ${descriptionsText}
                 </span>
             <span>&nbsp;&nbsp;|&nbsp;</span>
@@ -345,10 +351,10 @@ function updateTitle(isWarning = false) {
 
     const saveTexts = isEditing() ? `
         <span>&nbsp;|&nbsp;&nbsp;</span>
-        <span style="color: var(${isWarning ? '--color-brown' : '--color-white'})">${isWarning ? '* ' : ''}${lang('SaveQ', 'Save?')}</span>
+        <span style="color: var(${isWarning ? '--color-brown' : '--color-white'})">${isWarning ? '* ' : ''}${lang('SaveQ')}</span>
         &nbsp;
-        <button class="TitleButton" onclick="saveChanges()">${lang('Yes', '<bright>Y</bright>es,')}</button>
-        <button class="TitleButton" onclick="undoChanges()">${lang('No', '<bright>N</bright>o')}</button>
+        <button class="TitleButton" onclick="saveChanges()">${lang('Yes')}</button>
+        <button class="TitleButton" onclick="undoChanges()">${lang('No')}</button>
     ` : '';
 
     let actionButtons = '';
@@ -357,43 +363,43 @@ function updateTitle(isWarning = false) {
         case 'normal':
             const canPaste = isCharEmpty(getTabData('index'));
             actionButtons = `
-                <button class="TitleButton" onclick="editChar()">${lang('Edit', '<bright>E</bright>dit')}</button>
+                <button class="TitleButton" onclick="editChar()">${lang('Edit')}</button>
                 <span>&nbsp;|&nbsp;</span>
-                <button class="TitleButton" onclick="layerCopy()">${lang('Copy', '<bright>C</bright>opy')}</button>
+                <button class="TitleButton" onclick="layerCopy()">${lang('Copy')}</button>
                 ${canPaste
-                    ? `<button class="TitleButton" onclick="layerPaste()">${lang('Paste', '<bright>P</bright>aste')}</button>`
-                    : `<span style="color:var(--color-dark-gray)">&nbsp;${lang('Paste', '<bright>P</bright>aste')}&nbsp;</span>`
+                    ? `<button class="TitleButton" onclick="layerPaste()">${lang('Paste')}</button>`
+                    : `<span style="color:var(--color-dark-gray)">&nbsp;${lang('Paste')}&nbsp;</span>`
                 }
             `;
             break;
         case 'edit':
             actionButtons = `
-                <button class="TitleButton" onclick="editLayer()">${lang('Layer', '<bright>L</bright>ayer')}</button>
-                <button class="TitleButton" onclick="editTransform()">${lang('Transform', '<bright>T</bright>ransform')}</button>
-                <button class="TitleButton" onclick="editShift()">${lang('Shift', 'S<bright>h</bright>ift')}</button>
+                <button class="TitleButton" onclick="editLayer()">${lang('Glyph')}</button>
+                <button class="TitleButton" onclick="editTransform()">${lang('Transform')}</button>
+                <button class="TitleButton" onclick="editShift()">${lang('Shift')}</button>
             `;
             break;
         case 'layer':
             actionButtons = `
-                <button class="TitleButton" onclick="editBack()">${lang('Back', '<bright>B</bright>ack')}</button>
+                <button class="TitleButton" onclick="editBack()">${lang('Back')}</button>
                 <span>&nbsp;|&nbsp;</span>
-                <button class="TitleButton" onclick="layerCopy()">${lang('Copy', '<bright>C</bright>opy')}</button>
-                <button class="TitleButton" onclick="layerPaste()">${lang('Paste', '<bright>P</bright>aste')}</button>
-                <button class="TitleButton" onclick="layerClear()">${lang('Reset', 'R<bright>e</bright>set')}</button>
+                <button class="TitleButton" onclick="layerCopy()">${lang('Copy')}</button>
+                <button class="TitleButton" onclick="layerPaste()">${lang('Paste')}</button>
+                <button class="TitleButton" onclick="layerClear()">${lang('Reset')}</button>
             `;
             break;
         case 'transform':
             actionButtons = `
-                <button class="TitleButton" onclick="editBack()">${lang('Back', '<bright>B</bright>ack')}</button>
+                <button class="TitleButton" onclick="editBack()">${lang('Back')}</button>
                 <span>&nbsp;|&nbsp;</span>
-                <button class="TitleButton" onclick="transformReverse()">${lang('Reverse', 'R<bright>e</bright>verse')}</button>
-                <button class="TitleButton" onclick="transformFlipHorizontal()">${lang('FlipH', '<bright>F</bright>lip(↔)')}</button>
-                <button class="TitleButton" onclick="transformFlipVertical()">${lang('FlipV', 'F<bright>l</bright>ip(↕)')}</button>
+                <button class="TitleButton" onclick="transformReverse()">${lang('Reverse')}</button>
+                <button class="TitleButton" onclick="transformFlipHorizontal()">${lang('FlipH')}</button>
+                <button class="TitleButton" onclick="transformFlipVertical()">${lang('FlipV')}</button>
             `;
             break;
         case 'shift':
             actionButtons = `
-                <button class="TitleButton" onclick="editBack()">${lang('Back', '<bright>B</bright>ack')}</button>
+                <button class="TitleButton" onclick="editBack()">${lang('Back')}</button>
                 <span>&nbsp;|&nbsp;</span>
                 <button class="TitleButton" onclick="shiftLeft()"><bright>←</bright></button>
                 <button class="TitleButton" onclick="shiftDown()"><bright>↓</bright></button>

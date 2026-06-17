@@ -1,10 +1,10 @@
 (async () => {
     await loadLanguage();
 
-    document.getElementById('gotoButtonText').innerHTML = lang('Goto', '<bright>G</bright>oto:');
+    document.getElementById('gotoButtonText').innerHTML = lang('Goto');
     document.getElementById('stringInput').innerHTML = '__';
 
-    document.body.style.fontFamily = lang('UiFont', 'MBytePC230')
+    document.body.style.fontFamily = lang('UiFont')
 
     const charButtonArea = document.getElementById('charButtonArea');
     let buttonsHTML = '';
@@ -23,17 +23,7 @@
     const isDisabled = localStorage.getItem('helpDisenable') === 'true';
 
     if (!isDisabled) {
-        const defaultHelp = `
-            <div class="helpText" id="helpText">
-                <p>╔═ Help ════════════════╗</p>
-                <p>║ Click the Edit button ║</p>
-                <p>║ to edit the glyph.&nbsp;&nbsp;&nbsp; ║</p>
-                <p>║ Left-click to draw,&nbsp;&nbsp; ║</p>
-                <p>║ right-click to erase. ║</p>
-                <p>╚══════════════<button class="menuButton" id="closeHelpBtn" onclick="helpDisenable()">I <bright>k</bright>now</button>═╝</p>
-            </div>
-        `
-        container.insertAdjacentHTML('beforeend', lang('HelpBlock', defaultHelp));
+        container.insertAdjacentHTML('beforeend', lang('HelpBlock'));
     }
 
     updateTabs();

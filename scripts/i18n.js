@@ -1,7 +1,9 @@
 let currentLangData = {}
 
-function lang(key, defaultValue, fw = true) {
-    let r = currentLangData[key] ?? defaultValue;
+function lang(key, fw = true) {
+    let r = currentLangData[key];
+    if (r === undefined) return '';
+    if (typeof r !== 'string') return r;
     if (fw) return toFullWidthTag(r);
     return r;
 }
@@ -12,8 +14,11 @@ async function loadLanguage() {
 
     const response = await fetch('scripts/local.json');
     const data = await response.json();
-    if (data[langCode]) {
-        currentLangData = data[langCode]
+
+    currentLangData = { ...data['en'] };
+
+    if (langCode && data[langCode]) {
+        currentLangData = { ...currentLangData, ...data[langCode] };
     }
 
 }
@@ -23,5 +28,5 @@ function toFullWidthTag(str) {
     whiteList += '\r\n\t\v\h'
     const escapedList = whiteList.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const regex = new RegExp(`([^${escapedList}]+)`, 'gu');
-    return str.replace(regex, `<full-width style="top: ${lang('FullWidthOffset', '4px', false)}">$1</full-width>`);
+    return str.replace(regex, `<full-width style="top: ${lang('FullWidthOffset', false)}">$1</full-width>`);
 }
