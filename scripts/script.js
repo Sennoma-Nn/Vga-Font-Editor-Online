@@ -123,16 +123,16 @@ async function resetCharsData(h) {
 function askIsAbandon() {
     return new Promise((resolve) => {
         if (isProjDirty()) {
-            const abandonDiv = document.getElementById('menuBarWarningArea');
-            if (abandonDiv.querySelector('.menuButton')) {
+            const abandonDiv = document.getElementById('menu-bar-warning-area');
+            if (abandonDiv.querySelector('.menu-button')) {
                 resolve(false);
                 return;
             }
 
             abandonDiv.innerHTML = `
                 <span style="color: var(--color-red)">&nbsp;${lang('WarnLost')}</span>
-                <button class="menuButton" id="confirmYes">${lang('Yes')}</button>
-                <button class="menuButton" id="confirmNo">${lang('No')}</button>
+                <button class="menu-button" id="confirmYes">${lang('Yes')}</button>
+                <button class="menu-button" id="confirmNo">${lang('No')}</button>
             `;
 
             const handleChoice = (choice) => {
@@ -147,7 +147,7 @@ function askIsAbandon() {
 }
 
 function showError(message) {
-    const errorDiv = document.getElementById('menuBarWarningArea');
+    const errorDiv = document.getElementById('menu-bar-warning-area');
     errorDiv.innerHTML = `
         <span style="color: var(--color-red)">&nbsp;* Error: ${message}</span>
     `;
@@ -167,7 +167,7 @@ async function openFont() {
     const proceed = await askIsAbandon();
     if (!proceed) return;
 
-    const fileInput = document.getElementById('OpenFontInput');
+    const fileInput = document.getElementById('open-font-input');
     fileInput.click();
 
     fileInput.onchange = async (e) => {
@@ -286,28 +286,28 @@ function debug() {
 }
 
 function updateMenu() {
-    const menuBarButtonArea = document.getElementById('menuBarButtonArea');
+    const menuBarButtonArea = document.getElementById('menu-bar-button-area');
 
     let actionButtons = '';
 
     switch (editorData.menuMode) {
         case 'normal':
             actionButtons = `
-                <button class="menuButton" onclick="menuNew()">${lang('New')}</button>
-                <button class="menuButton" onclick="renameFont()">${lang('Rename')}</button>
-                <button class="menuButton" onclick="openFont()">${lang('Open')}</button>
-                <button class="menuButton" onclick="saveFont()">${lang('Save')}</button>
-                <button class="menuButton" onclick="previewFont()">${lang('Preview')}</button>
+                <button class="menu-button" onclick="menuNew()">${lang('New')}</button>
+                <button class="menu-button" onclick="renameFont()">${lang('Rename')}</button>
+                <button class="menu-button" onclick="openFont()">${lang('Open')}</button>
+                <button class="menu-button" onclick="saveFont()">${lang('Save')}</button>
+                <button class="menu-button" onclick="previewFont()">${lang('Preview')}</button>
             `;
             break;
         case 'new':
             actionButtons = `
-                <button class="menuButton" onclick="menuCancelNew()">${lang('CancelNew')}</button>
+                <button class="menu-button" onclick="menuCancelNew()">${lang('CancelNew')}</button>
                 <span>&nbsp;|&nbsp;</span>
                 <span>${lang('Size')}:&nbsp;</span>
-                <button class="menuButton" onclick="menuNewButton(16)">8x1<bright>6</bright>,</button>
-                <button class="menuButton" onclick="menuNewButton(14)">8x1<bright>4</bright>,</button>
-                <button class="menuButton" onclick="menuNewButton(8)">8x<bright>8</bright></button>
+                <button class="menu-button" onclick="menuNewButton(16)">8x1<bright>6</bright>,</button>
+                <button class="menu-button" onclick="menuNewButton(14)">8x1<bright>4</bright>,</button>
+                <button class="menu-button" onclick="menuNewButton(8)">8x<bright>8</bright></button>
             `;
             break;
     }
@@ -331,7 +331,7 @@ function shortName(text) {
 
 function updateTitle(isWarning = false) {
     const index = getTabData('index');
-    const charTitle = document.getElementById('charTitle');
+    const charTitle = document.getElementById('char-title');
 
     let descriptionsText = '';
     if (getTabData('mode') === 'normal') {
@@ -353,8 +353,8 @@ function updateTitle(isWarning = false) {
         <span>&nbsp;|&nbsp;&nbsp;</span>
         <span style="color: var(${isWarning ? '--color-brown' : '--color-white'})">${isWarning ? '* ' : ''}${lang('SaveQ')}</span>
         &nbsp;
-        <button class="TitleButton" onclick="saveChanges()">${lang('Yes')}</button>
-        <button class="TitleButton" onclick="undoChanges()">${lang('No')}</button>
+        <button class="title-button" onclick="saveChanges()">${lang('Yes')}</button>
+        <button class="title-button" onclick="undoChanges()">${lang('No')}</button>
     ` : '';
 
     let actionButtons = '';
@@ -363,48 +363,48 @@ function updateTitle(isWarning = false) {
         case 'normal':
             const canPaste = isCharEmpty(getTabData('index'));
             actionButtons = `
-                <button class="TitleButton" onclick="editChar()">${lang('Edit')}</button>
+                <button class="title-button" onclick="editChar()">${lang('Edit')}</button>
                 <span>&nbsp;|&nbsp;</span>
-                <button class="TitleButton" onclick="layerCopy()">${lang('Copy')}</button>
+                <button class="title-button" onclick="layerCopy()">${lang('Copy')}</button>
                 ${canPaste
-                    ? `<button class="TitleButton" onclick="layerPaste()">${lang('Paste')}</button>`
+                    ? `<button class="title-button" onclick="layerPaste()">${lang('Paste')}</button>`
                     : `<span style="color:var(--color-dark-gray)">&nbsp;${lang('Paste')}&nbsp;</span>`
                 }
             `;
             break;
         case 'edit':
             actionButtons = `
-                <button class="TitleButton" onclick="editLayer()">${lang('Glyph')}</button>
-                <button class="TitleButton" onclick="editTransform()">${lang('Transform')}</button>
-                <button class="TitleButton" onclick="editShift()">${lang('Shift')}</button>
+                <button class="title-button" onclick="editLayer()">${lang('Glyph')}</button>
+                <button class="title-button" onclick="editTransform()">${lang('Transform')}</button>
+                <button class="title-button" onclick="editShift()">${lang('Shift')}</button>
             `;
             break;
         case 'layer':
             actionButtons = `
-                <button class="TitleButton" onclick="editBack()">${lang('Back')}</button>
+                <button class="title-button" onclick="editBack()">${lang('Back')}</button>
                 <span>&nbsp;|&nbsp;</span>
-                <button class="TitleButton" onclick="layerCopy()">${lang('Copy')}</button>
-                <button class="TitleButton" onclick="layerPaste()">${lang('Paste')}</button>
-                <button class="TitleButton" onclick="layerClear()">${lang('Reset')}</button>
+                <button class="title-button" onclick="layerCopy()">${lang('Copy')}</button>
+                <button class="title-button" onclick="layerPaste()">${lang('Paste')}</button>
+                <button class="title-button" onclick="layerClear()">${lang('Reset')}</button>
             `;
             break;
         case 'transform':
             actionButtons = `
-                <button class="TitleButton" onclick="editBack()">${lang('Back')}</button>
+                <button class="title-button" onclick="editBack()">${lang('Back')}</button>
                 <span>&nbsp;|&nbsp;</span>
-                <button class="TitleButton" onclick="transformReverse()">${lang('Reverse')}</button>
-                <button class="TitleButton" onclick="transformFlipHorizontal()">${lang('FlipH')}</button>
-                <button class="TitleButton" onclick="transformFlipVertical()">${lang('FlipV')}</button>
+                <button class="title-button" onclick="transformReverse()">${lang('Reverse')}</button>
+                <button class="title-button" onclick="transformFlipHorizontal()">${lang('FlipH')}</button>
+                <button class="title-button" onclick="transformFlipVertical()">${lang('FlipV')}</button>
             `;
             break;
         case 'shift':
             actionButtons = `
-                <button class="TitleButton" onclick="editBack()">${lang('Back')}</button>
+                <button class="title-button" onclick="editBack()">${lang('Back')}</button>
                 <span>&nbsp;|&nbsp;</span>
-                <button class="TitleButton" onclick="shiftLeft()"><bright>←</bright></button>
-                <button class="TitleButton" onclick="shiftDown()"><bright>↓</bright></button>
-                <button class="TitleButton" onclick="shiftUp()"><bright>↑</bright></button>
-                <button class="TitleButton" onclick="shiftRight()"><bright>→</bright></button>
+                <button class="title-button" onclick="shiftLeft()"><bright>←</bright></button>
+                <button class="title-button" onclick="shiftDown()"><bright>↓</bright></button>
+                <button class="title-button" onclick="shiftUp()"><bright>↑</bright></button>
+                <button class="title-button" onclick="shiftRight()"><bright>→</bright></button>
             `
             break;
     }
@@ -459,7 +459,7 @@ function drawGrid(ctx, grid, x, y, fh) {
 }
 
 function updatePreviewCanvas() {
-    const canvas = document.getElementById('previewCanvas')
+    const canvas = document.getElementById('preview-canvas')
     canvas.width = 1280;
     canvas.height = 32 * (25 - 2);
 
@@ -699,7 +699,7 @@ function highlightCharButton(index, updateHighlight) {
     const currentBtn = document.getElementById(`openChar${index}`);
 
     if (updateHighlight) {
-        const lastActive = document.querySelector('.charButton.active');
+        const lastActive = document.querySelector('.char-button.active');
         if (lastActive) lastActive.classList.remove('active');
         currentBtn.classList.add('active');
     }
@@ -725,7 +725,7 @@ async function openChar(index, toNormal, updateHighlight) {
 
 function renderCanvas() {
     const index = getTabData('index');
-    const canvas = document.getElementById('pixelCanvas');
+    const canvas = document.getElementById('pixel-canvas');
     const h = getFontData('height');
     const wh = h <= 24 ? 32 : 16;
     const charData = isEditing() ? getTabData('changedData') : getFontData('data')[index];
@@ -760,7 +760,7 @@ function updatePreviewCanvass(i) {
         let pixelsHTML = '';
         for (let j = 0; j < charData.length; j++) {
             const isVisible = Number(charData[j]) ? '' : 'style="background-color: transparent"';
-            pixelsHTML += `<div class="prevPixel" ${isVisible}></div>`;
+            pixelsHTML += `<div class="prev-pixel" ${isVisible}></div>`;
         }
         preview.innerHTML = pixelsHTML;
     }
@@ -809,7 +809,7 @@ function undoChanges() {
 }
 
 function helpDisenable() {
-    const helpDiv = document.getElementById('helpText');
+    const helpDiv = document.getElementById('help-text');
     if (helpDiv) {
         helpDiv.style.display = 'none';
         localStorage.setItem('helpDisenable', 'true');
@@ -818,11 +818,11 @@ function helpDisenable() {
 
 function updataGoto() {
     if (editorData.inputmode !== 'goto') {
-        document.getElementById('stringInput').innerHTML = '__';
+        document.getElementById('string-input').innerHTML = '__';
         return;
     }
 
-    const gotoInputSpan = document.getElementById('stringInput');
+    const gotoInputSpan = document.getElementById('string-input');
     const val = editorData.stringInput;
 
     if (val.length === 0) gotoInputSpan.innerHTML = '<bright>_</bright>_';
@@ -831,7 +831,7 @@ function updataGoto() {
 }
 
 function cancelGoto() {
-    document.getElementById('stringInput').innerHTML = '__';
+    document.getElementById('string-input').innerHTML = '__';
 
     editorData.inputmode = 'normal';
     editorData.stringInput = '';
@@ -844,7 +844,7 @@ function gotoJump() {
         return;
     }
 
-    document.getElementById('stringInput').innerHTML = '__';
+    document.getElementById('string-input').innerHTML = '__';
 
     const val = editorData.stringInput;
 
@@ -883,7 +883,7 @@ function gotoInputStart() {
 
     if (editorData.inputmode === 'goto') return;
 
-    document.getElementById('stringInput').innerHTML = '__';
+    document.getElementById('string-input').innerHTML = '__';
 
     if (isDirty()) {
         updateTitle(true);
@@ -897,7 +897,7 @@ function gotoInputStart() {
 }
 
 function changeTab(tab) {
-    const warningDiv = document.getElementById('menuBarWarningArea');
+    const warningDiv = document.getElementById('menu-bar-warning-area');
     const previewDiv = document.getElementById('preview');
 
     const confirmNoBtn = warningDiv ? warningDiv.querySelector('#confirmNo') : null;
@@ -996,8 +996,8 @@ function updateTabs() {
         }
 
         tabsHTML += `
-            <div class="${isSelecting ? 'tabButtonWhiteBG' : 'tabButtonDarkGrayBG'}">
-                <button class="${isSelecting ? 'menuButton' : 'menuButtonDark'}" onclick='changeTab(${i})'>
+            <div class="${isSelecting ? 'tab-button-white-bg' : 'tab-button-dark-gray-bg'}">
+                <button class="${isSelecting ? 'menu-button' : 'menu-button-dark'}" onclick='changeTab(${i})'>
                     ${displayName}
                 </button>
             </div> 

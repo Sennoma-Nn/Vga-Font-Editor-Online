@@ -75,7 +75,7 @@ span {
     flex-shrink: 0;
 }
 
-.tabBar {
+.tab-bar {
     background-color: var(--color-dark-gray);
     width: 100%;
     height: 32px;
@@ -86,12 +86,12 @@ span {
     scrollbar-width: none;
 }
 
-.tabButtonWhiteBG {
+.tab-button-white-bg {
     background-color: var(--color-white);
     display: flex;
 }
 
-.tabButtonDarkGrayBG {
+.tab-button-dark-gray-bg {
     background-color: var(--color-dark-gray);
     display: flex;
 }
@@ -100,7 +100,7 @@ span {
     display: flex;
 }
 
-.menuBar {
+.menu-bar {
     background-color: var(--color-white);
     width: 100%;
     height: 32px;
@@ -111,8 +111,8 @@ span {
     scrollbar-width: none;
 }
 
-.menuBarButtonArea,
-.menuBarWarningArea {
+.menu-bar-button-area,
+.menu-bar-warning-area {
     flex-shrink: 0;
     display: flex;
     overflow-x: auto;
@@ -124,7 +124,7 @@ bright {
     color: var(--color-yellow)
 }
 
-.menuButton {
+.menu-button {
     height: 100%;
     line-height: 100%;
     background: transparent;
@@ -138,26 +138,26 @@ bright {
     flex-shrink: 0;
 }
 
-.menuButton bright {
+.menu-button bright {
     color: var(--color-brown);
 }
 
-.menuButton:hover {
+.menu-button:hover {
     background-color: var(--color-light-gray);
 }
 
-.menuButton:active,
-.menuButton.pressed {
+.menu-button:active,
+.menu-button.pressed {
     background-color: var(--color-dark-gray);
     color: var(--color-white);
 }
 
-.menuButton:active bright,
-.menuButton.pressed bright {
+.menu-button:active bright,
+.menu-button.pressed bright {
     color: var(--color-yellow);
 }
 
-.menuButtonDark {
+.menu-button-dark {
     height: 100%;
     line-height: 100%;
     background: transparent;
@@ -171,28 +171,28 @@ bright {
     flex-shrink: 0;
 }
 
-.menuButtonDark bright {
+.menu-button-dark bright {
     color: var(--color-yellow);
 }
 
-.menuButtonDark:hover {
+.menu-button-dark:hover {
     background-color: var(--color-light-gray);
     color: var(--color-black);
 }
 
-.menuButtonDark:active,
-.menuButtonDark.pressed {
+.menu-button-dark:active,
+.menu-button-dark.pressed {
     background-color: var(--color-white);
     color: var(--color-black);
 }
 
-.menuButtonDark:active bright,
-.menuButtonDark.pressed bright {
+.menu-button-dark:active bright,
+.menu-button-dark.pressed bright {
     color: var(--color-brown);
 }
 
 
-.charButton {
+.char-button {
     height: 80px;
     width: 64px;
     font-family: PC3K_Alt;
@@ -214,32 +214,32 @@ bright {
     font-size: 16px;
 }
 
-.charButton:hover,
-.charButton.active {
+.char-button:hover,
+.char-button.active {
     background-color: var(--color-light-gray);
     color: var(--color-black);
 }
 
-.charButton:active,
-.charButton.active:active {
+.char-button:active,
+.char-button.active:active {
     background-color: var(--color-white);
     color: var(--color-black);
 }
 
-.charPreview {
+.char-preview {
     position: absolute;
     top: 14px;
     display: grid;
     grid-template-columns: repeat(8, 2px);
 }
 
-.prevPixel {
+.prev-pixel {
     width: 2px;
     height: 2px;
     background-color: currentColor;
 }
 
-.charIndex {
+.char-index {
     line-height: 16px;
     position: absolute;
     bottom: 14px;
@@ -253,13 +253,13 @@ bright {
     display: flex;
 }
 
-.charArea {
+.char-area {
     background-color: var(--color-dark-gray);
     width: 256px;
     height: 100%;
 }
 
-.charButtonArea {
+.char-button-area {
     width: 256px;
     height: calc(100% - 32px);
     overflow-x: hidden;
@@ -284,40 +284,40 @@ bright {
     color: var(--color-yellow);
 }
 
-.goto .menuButton {
+.goto .menu-button {
     color: var(--color-white);
     width: 100%;
     text-align: left;
 }
 
-.goto .menuButton:hover {
+.goto .menu-button:hover {
     background-color: var(--color-light-gray);
     color: var(--color-black);
 }
 
-.goto .menuButton:active,
-.goto .menuButton.pressed {
+.goto .menu-button:active,
+.goto .menu-button.pressed {
     background-color: var(--color-white);
     color: var(--color-black);
 }
 
-.goto .menuButton:hover bright,
-.goto .menuButton:active bright,
-.goto .menuButton.pressed bright {
+.goto .menu-button:hover bright,
+.goto .menu-button:active bright,
+.goto .menu-button.pressed bright {
     color: var(--color-brown);
 }
 
-.canvasArea {
+.canvas-area {
     background-color: var(--color-light-gray);
     width: calc(100% - 64px);
     height: 100%;
 }
 
-.canvarsAndHelp {
+.canvars-and-help {
     display: flex;
 }
 
-.helpText {
+.help-text {
     line-height: 32px;
     margin: 0px 0px;
     padding: 32px;
@@ -328,34 +328,34 @@ bright {
     margin: 32px
 }
 
-.helpText .menuButton {
+.help-text .menu-button {
     color: var(--color-white);
 }
 
-.helpText .menuButton:hover {
+.help-text .menu-button:hover {
     background-color: var(--color-light-magenta);
 }
 
-.helpText .menuButton:active,
-.helpText .menuButton.pressed {
+.help-text .menu-button:active,
+.help-text .menu-button.pressed {
     background-color: var(--color-white);
     color: var(--color-black);
 }
 
-.helpText .menuButton:active bright,
-.helpText .menuButton.pressed bright {
+.help-text .menu-button:active bright,
+.help-text .menu-button.pressed bright {
     color: var(--color-brown);
 }
 
-.helpText bright {
+.help-text bright {
     color: var(--color-yellow);
 }
 
-.helpText p {
+.help-text p {
     margin: 0;
 }
 
-.charTitle {
+.char-title {
     background-color: var(--color-blue);
     width: 100%;
     height: 32px;
@@ -367,7 +367,7 @@ bright {
     scrollbar-width: none;
 }
 
-.TitleButton {
+.title-button {
     height: 100%;
     font-family: PC3K_Alt;
     line-height: 100%;
@@ -383,29 +383,29 @@ bright {
     flex-shrink: 0;
 }
 
-.TitleButton:hover {
+.title-button:hover {
     background-color: var(--color-light-blue);
 }
 
-.TitleButton:active {
+.title-button:active {
     background-color: var(--color-white);
     color: var(--color-black)
 }
 
-.TitleButton:active bright {
+.title-button:active bright {
     color: var(--color-brown)
 }
 
-.TitleButton.pressed {
+.title-button.pressed {
     background-color: var(--color-white);
     color: var(--color-black);
 }
 
-.TitleButton.pressed bright {
+.title-button.pressed bright {
     color: var(--color-brown);
 }
 
-.pixelCanvas {
+.pixel-canvas {
     display: grid;
     grid-template-columns: repeat(8, 32px);
     grid-template-rows: repeat(16, 32px);
@@ -420,15 +420,15 @@ bright {
     box-sizing: border-box;
 }
 
-.pixelCanvas,
-.helpText {
+.pixel-canvas,
+.help-text {
     box-shadow: 32px 32px 0 0 var(--color-dark-gray);
 }
 
-.tabBar::-webkit-scrollbar,
-.menuBar::-webkit-scrollbar,
-.charTitle::-webkit-scrollbar,
-.charButtonArea::-webkit-scrollbar {
+.tab-bar::-webkit-scrollbar,
+.menu-bar::-webkit-scrollbar,
+.char-title::-webkit-scrollbar,
+.char-button-area::-webkit-scrollbar {
     width: 0 !important
 }
 
@@ -445,7 +445,7 @@ bright {
     display: none
 }
 
-.previewCanvas {
+.preview-canvas {
     width: calc(16px * 80);
     height: calc(32px * (25 - 2));
     image-rendering: pixelated;
