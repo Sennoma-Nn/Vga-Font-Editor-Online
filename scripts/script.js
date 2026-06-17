@@ -614,7 +614,7 @@ function resetResetButton(h) {
 }
 
 function loadTemplatesFrom(name) {
-    openFontFromURL(`../fontTemplates/${name}`)
+    openFontFromURL(`./fontTemplates/${name}`)
     resetCancelReset();
 }
 
