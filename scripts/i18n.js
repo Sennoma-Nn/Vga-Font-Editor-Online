@@ -28,5 +28,5 @@ function toFullWidthTag(str) {
     whiteList += '\r\n\t\v\h'
     const escapedList = whiteList.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const regex = new RegExp(`([^${escapedList}]+)`, 'gu');
-    return str.replace(regex, `<full-width style="top: ${lang('FullWidthOffset', false)}">$1</full-width>`);
+    return str.replace(regex, `<full-width style="top: ${lang('FullWidthYOffset', false)}">$1</full-width>`);
 }

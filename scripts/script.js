@@ -156,6 +156,77 @@ function showError(message) {
     }, 2000);
 }
 
+function parseFontData(uint8) {
+    let result = "";
+
+    for (let i = 0; i < uint8.length; i++) {
+        result += uint8[i].toString(2).padStart(8, '0');
+    }
+
+    let charLen = result.length / 256;
+    if (charLen % 1 !== 0) {
+        showError(lang('ErrorFont'));
+        return false;
+    }
+
+    let fontHeight = charLen / 8;
+    if (!(fontHeight > 0 && fontHeight <= 32)) {
+        showError(lang('ErrorFont'));
+        return false;
+    }
+    setFontData('height', fontHeight);
+
+    for (let i = 0; i <= 255; i++) {
+        let s = i * charLen;
+        let e = (i + 1) * charLen;
+        getFontData('data')[i] = result.slice(s, e);
+    }
+
+    updateAllPreviews();
+    openChar(getTabData('index'), true);
+    updateTabs();
+    updatePreviewCanvas();
+
+    if (editorData.inputmode === 'name') {
+        editorData.inputmode = 'normal';
+        updateTabs();
+    }
+
+    return true;
+}
+
+async function openFontFromURL(url) {
+    if (isDirty()) {
+        updateTitle(true);
+        return;
+    }
+
+    setTabData('mode', 'normal');
+
+    const proceed = await askIsAbandon();
+    if (!proceed) return;
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            showError(lang('ErrorFetch'));
+            return;
+        }
+
+        const buffer = await response.arrayBuffer();
+        const uint8 = new Uint8Array(buffer);
+
+        if (!parseFontData(uint8)) return;
+
+        const urlParts = url.split('/');
+        const fontName = urlParts[urlParts.length - 1]
+        setTabData('name', fontName);
+        updateTabs()
+    } catch (err) {
+        showError(lang('ErrorFetch'));
+    }
+}
+
 async function openFont() {
     if (isDirty()) {
         updateTitle(true);
@@ -177,37 +248,12 @@ async function openFont() {
         const buffer = await file.arrayBuffer();
         const uint8 = new Uint8Array(buffer);
 
-        let result = "";
-
-        for (let i = 0; i < uint8.length; i++) {
-            result += uint8[i].toString(2).padStart(8, '0');
-        }
-
-        let charLen = result.length / 256;
-        if (charLen % 1 !== 0) {
-            showError(lang('ErrorFont'));
-            return;
-        }
-
-        let fontHeight = charLen / 8;
-        if (!(fontHeight > 0 && fontHeight <= 32)) {
-            showError(lang('ErrorFont'));
-            return;
-        }
-        setFontData('height', fontHeight);
-
-        for (let i = 0; i <= 255; i++) {
-            let s = i * charLen;
-            let e = (i + 1) * charLen;
-            getFontData('data')[i] = result.slice(s, e);
-        }
+        if (!parseFontData(uint8)) return;
 
         setTabData('name', file.name);
-        updateAllPreviews();
-        openChar(getTabData('index'), true);
+        updateTabs()
+
         fileInput.value = '';
-        updateTabs();
-        updatePreviewCanvas()
     };
 }
 
@@ -274,6 +320,12 @@ function previewFont() {
 }
 
 function renameFont() {
+    if (editorData.inputmode === 'name') {
+        editorData.inputmode = 'normal';
+        updateTabs();
+        return;
+    }
+
     if (editorData.inputmode === 'goto') cancelGoto();
 
     editorData.inputmode = 'name';
@@ -293,21 +345,32 @@ function updateMenu() {
     switch (editorData.menuMode) {
         case 'normal':
             actionButtons = `
-                <button class="menu-button" onclick="menuNew()">${lang('New')}</button>
+                <button class="menu-button" onclick="menuReset()">${lang('Reset')}</button>
                 <button class="menu-button" onclick="renameFont()">${lang('Rename')}</button>
                 <button class="menu-button" onclick="openFont()">${lang('Open')}</button>
                 <button class="menu-button" onclick="saveFont()">${lang('Save')}</button>
                 <button class="menu-button" onclick="previewFont()">${lang('Preview')}</button>
             `;
             break;
-        case 'new':
+        case 'reset':
             actionButtons = `
-                <button class="menu-button" onclick="menuCancelNew()">${lang('CancelNew')}</button>
-                <span>&nbsp;|&nbsp;</span>
+                <button class="menu-button" onclick="resetCancelReset()">${lang('CancelReset')}</button>
+                <span>|</span>
+                <button class="menu-button" onclick="resetLoadTemplates()">${lang('LoadTemplates')}</button>
+                <span>|&nbsp;</span>
                 <span>${lang('Size')}:&nbsp;</span>
-                <button class="menu-button" onclick="menuNewButton(16)">8x1<bright>6</bright>,</button>
-                <button class="menu-button" onclick="menuNewButton(14)">8x1<bright>4</bright>,</button>
-                <button class="menu-button" onclick="menuNewButton(8)">8x<bright>8</bright></button>
+                <button class="menu-button" onclick="resetResetButton(16)">8x1<bright>6</bright>,</button>
+                <button class="menu-button" onclick="resetResetButton(14)">8x1<bright>4</bright>,</button>
+                <button class="menu-button" onclick="resetResetButton(8)">8x<bright>8</bright></button>
+            `;
+            break;
+        case 'templates':
+            actionButtons = `
+                <button class="menu-button" onclick="templatesCancelLoadTemplates()">${lang('CancelLoadTemplates')}</button>
+                <span>|&nbsp;</span>
+                <span>${lang('Select')}:&nbsp;</span>
+                <button class="menu-button" onclick="loadTemplatesFrom('IBM_8X16.RAW')"><bright>1</bright>.IBM_8X16,</button>
+                <button class="menu-button" onclick="loadTemplatesFrom('QUADBM_8X8.RAW')"><bright>2</bright>.QUADBM_8X8</button>
             `;
             break;
     }
@@ -385,7 +448,7 @@ function updateTitle(isWarning = false) {
                 <span>&nbsp;|&nbsp;</span>
                 <button class="title-button" onclick="layerCopy()">${lang('Copy')}</button>
                 <button class="title-button" onclick="layerPaste()">${lang('Paste')}</button>
-                <button class="title-button" onclick="layerClear()">${lang('Reset')}</button>
+                <button class="title-button" onclick="layerClear()">${lang('Clear')}</button>
             `;
             break;
         case 'transform':
@@ -525,19 +588,34 @@ function updatePreviewCanvas() {
     drawArr(ctx, testPrice, 2, 16, fontHeight);
 }
 
-function menuCancelNew() {
+function menuReset() {
+    editorData.menuMode = 'reset';
+    updateMenu();
+}
+
+function resetCancelReset() {
     editorData.menuMode = 'normal';
     updateMenu();
 }
 
-function menuNew() {
-    editorData.menuMode = 'new';
+function resetLoadTemplates() {
+    editorData.menuMode = 'templates';
     updateMenu();
 }
 
-function menuNewButton(h) {
+function templatesCancelLoadTemplates() {
+    editorData.menuMode = 'reset';
+    updateMenu();
+}
+
+function resetResetButton(h) {
     resetCharsData(h);
-    menuCancelNew();
+    resetCancelReset();
+}
+
+function loadTemplatesFrom(name) {
+    openFontFromURL(`../fontTemplates/${name}`)
+    resetCancelReset();
 }
 
 function transformFlipHorizontal() {
@@ -920,6 +998,11 @@ function changeTab(tab) {
 function addTab() {
     const newIndex = editorData.tabsData.length;
 
+    if (editorData.inputmode === 'name') {
+        editorData.inputmode = 'normal';
+        updateTabs();
+    }
+
     editorData.tabsData = [
         ...editorData.tabsData,
         {
@@ -943,6 +1026,11 @@ async function removeTab() {
     if (isDirty()) {
         updateTitle(true);
         return;
+    }
+
+    if (editorData.inputmode === 'name') {
+        editorData.inputmode = 'normal';
+        updateTabs();
     }
 
     setTabData('mode', 'normal');
