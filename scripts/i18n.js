@@ -1,8 +1,8 @@
 let currentLangData = {}
 
-function lang(key, defaultValue, callUni = true) {
-    let r = currentLangData[key] || defaultValue;
-    if (callUni) return toFullWidthTag(r);
+function lang(key, defaultValue, fw = true) {
+    let r = currentLangData[key] ?? defaultValue;
+    if (fw) return toFullWidthTag(r);
     return r;
 }
 
