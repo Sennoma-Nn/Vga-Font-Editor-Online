@@ -37,8 +37,8 @@
 }
 
 @font-face {
-    font-family: 'ZLabsRoundPix';
-    src: url('../fonts/ZLabsRoundPix_16px_M_CN.ttf') format('opentype');
+    font-family: 'UnifontJP';
+    src: url('../fonts/UnifontJP.otf') format('opentype');
 }
 
 @font-face {

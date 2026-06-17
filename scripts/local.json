@@ -1,7 +1,7 @@
 {
     "zh-cn": {
-        "UiFont": "MBytePC230, ZLabsRoundPix",
-        "FullWidthOffset": "2px",
+        "UiFont": "MBytePC230, ZhengGeDianHei",
+        "FullWidthOffset": "4px",
         "New": "新建(<bright>W</bright>)",
         "CancelNew": "取消新建(<bright>W</bright>)",
         "Size": "大小",
@@ -576,12 +576,12 @@
         ]
     },
     "ja": {
-        "UiFont": "MBytePC230, ZhengGeDianHei",
+        "UiFont": "MBytePC230, UnifontJP",
         "FullWidthOffset": "4px",
         "New": "新規(<bright>W</bright>)",
         "CancelNew": "キャンセル(<bright>W</bright>)",
         "Size": "サイズ",
-        "Rename": "リネーム(<bright>R</bright>)",
+        "Rename": "名称変更(<bright>R</bright>)",
         "Open": "開く(<bright>O</bright>)",
         "Save": "保存(<bright>S</bright>)",
         "Preview": "表示(<bright>V</bright>)",
@@ -589,7 +589,7 @@
         "Edit": "編集(<bright>E</bright>)",
         "Layer": "画像(<bright>L</bright>)",
         "Transform": "変形(<bright>T</bright>)",
-        "Shift": "シフト(<bright>H</bright>)",
+        "Shift": "パン(<bright>H</bright>)",
         "Back": "戻る(<bright>B</bright>)",
         "Copy": "コピー(<bright>C</bright>)",
         "Paste": "貼付(<bright>P</bright>)",
