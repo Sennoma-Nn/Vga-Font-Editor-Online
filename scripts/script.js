@@ -961,12 +961,17 @@ function gotoJump() {
 }
 
 function gotoInputStart() {
+    if (editorData.inputmode === 'goto') {
+        editorData.inputmode = 'normal';
+        updateTabs();
+        updataGoto();
+        return;
+    }
+
     if (editorData.inputmode === 'name') {
         editorData.inputmode = 'normal';
         updateTabs();
     }
-
-    if (editorData.inputmode === 'goto') return;
 
     document.getElementById('string-input').innerHTML = '__';
 
