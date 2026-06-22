@@ -1,4 +1,8 @@
 let editorData = {
+    about: {
+        version: '0.1.1',
+        github: 'https://github.com/Sennoma-Nn/Vga-Font-Editor-Online'
+    },
     tab: 0,
     menuMode: 'normal',
     tabsData: [
@@ -130,7 +134,7 @@ function askIsAbandon() {
             }
 
             abandonDiv.innerHTML = `
-                <span style="color: var(--color-red)">&nbsp;${lang('WarnLost')}</span>
+                <span style="color: var(--color-red)">&nbsp;${lang('WarnLost')}&nbsp;</span>
                 <button class="menu-button" id="confirmYes">${lang('Yes')}</button>
                 <button class="menu-button" id="confirmNo">${lang('No')}</button>
             `;
@@ -227,7 +231,7 @@ async function openFontFromURL(url) {
     }
 }
 
-async function openFont() {
+async function menuOpenFont() {
     if (isDirty()) {
         updateTitle(true);
         return;
@@ -257,7 +261,7 @@ async function openFont() {
     };
 }
 
-async function saveFont() {
+async function menuSaveFont() {
     if (isDirty()) {
         updateTitle(true);
         return;
@@ -311,7 +315,7 @@ async function saveFont() {
     URL.revokeObjectURL(url);
 }
 
-function previewFont() {
+function menuPreviewFont() {
     updatePreviewCanvas();
     const previewDiv = document.getElementById('preview');
     if (previewDiv.style.display === 'none' || previewDiv.style.display === '') {
@@ -319,7 +323,7 @@ function previewFont() {
     } else previewDiv.style.display = 'none'
 }
 
-function renameFont() {
+function menuRenameFont() {
     if (editorData.inputmode === 'name') {
         editorData.inputmode = 'normal';
         updateTabs();
@@ -346,10 +350,11 @@ function updateMenu() {
         case 'normal':
             actionButtons = `
                 <button class="menu-button" onclick="menuReset()">${lang('Reset')}</button>
-                <button class="menu-button" onclick="renameFont()">${lang('Rename')}</button>
-                <button class="menu-button" onclick="openFont()">${lang('Open')}</button>
-                <button class="menu-button" onclick="saveFont()">${lang('Save')}</button>
-                <button class="menu-button" onclick="previewFont()">${lang('Preview')}</button>
+                <button class="menu-button" onclick="menuRenameFont()">${lang('Rename')}</button>
+                <button class="menu-button" onclick="menuOpenFont()">${lang('Open')}</button>
+                <button class="menu-button" onclick="menuSaveFont()">${lang('Save')}</button>
+                <button class="menu-button" onclick="menuPreviewFont()">${lang('Preview')}</button>
+                <button class="menu-button" onclick="menuAbout()">${lang('About')}</button>
             `;
             break;
         case 'reset':
@@ -371,6 +376,15 @@ function updateMenu() {
                 <span>${lang('Select')}:&nbsp;</span>
                 <button class="menu-button" onclick="loadTemplatesFrom('IBM_8X16.RAW')"><bright>1</bright>.IBM_8X16,</button>
                 <button class="menu-button" onclick="loadTemplatesFrom('QUADBM_8X8.RAW')"><bright>2</bright>.QUADBM_8X8</button>
+            `;
+            break;
+        case 'about':
+            actionButtons = `
+                <button class="menu-button" onclick="bakcMainMenu()">${lang('BakcMainMenu')}</button>
+                <span>|&nbsp;</span>
+                <span>VGA FONT EDITOR ONLINE ${editorData.about.version}</span>
+                <span>&nbsp;|</span>
+                <button class="hyper-link-button" onclick="viewOnGitHub()">${lang('ViewOnGitHub')}</button>
             `;
             break;
     }
@@ -414,7 +428,7 @@ function updateTitle(isWarning = false) {
 
     const saveTexts = isEditing() ? `
         <span>&nbsp;|&nbsp;&nbsp;</span>
-        <span style="color: var(${isWarning ? '--color-brown' : '--color-white'})">${isWarning ? '* ' : ''}${lang('SaveQ')}</span>
+        <span style="color: var(${isWarning ? '--color-brown' : '--color-white'})">${isWarning ? '☼ ' : ''}${lang('SaveQ')}</span>
         &nbsp;
         <button class="title-button" onclick="saveChanges()">${lang('Yes')}</button>
         <button class="title-button" onclick="undoChanges()">${lang('No')}</button>
@@ -464,10 +478,10 @@ function updateTitle(isWarning = false) {
             actionButtons = `
                 <button class="title-button" onclick="editBack()">${lang('Back')}</button>
                 <span>&nbsp;|&nbsp;</span>
-                <button class="title-button" onclick="shiftLeft()"><bright>←</bright></button>
-                <button class="title-button" onclick="shiftDown()"><bright>↓</bright></button>
-                <button class="title-button" onclick="shiftUp()"><bright>↑</bright></button>
-                <button class="title-button" onclick="shiftRight()"><bright>→</bright></button>
+                <button class="title-button" onclick="shiftLeft()"><bright>◄</bright></button>
+                <button class="title-button" onclick="shiftDown()"><bright>▼</bright></button>
+                <button class="title-button" onclick="shiftUp()"><bright>▲</bright></button>
+                <button class="title-button" onclick="shiftRight()"><bright>►</bright></button>
             `
             break;
     }
@@ -598,6 +612,20 @@ function updatePreviewCanvas() {
 function menuReset() {
     editorData.menuMode = 'reset';
     updateMenu();
+}
+
+function menuAbout() {
+    editorData.menuMode = 'about';
+    updateMenu();
+}
+
+function bakcMainMenu() {
+    editorData.menuMode = 'normal';
+    updateMenu();
+}
+
+function viewOnGitHub() {
+    window.open(editorData.about.github);
 }
 
 function resetCancelReset() {

@@ -144,6 +144,7 @@ bright {
 
 .menu-button:hover {
     background-color: var(--color-light-gray);
+    cursor: pointer;
 }
 
 .menu-button:active,
@@ -178,6 +179,7 @@ bright {
 .menu-button-dark:hover {
     background-color: var(--color-light-gray);
     color: var(--color-black);
+    cursor: pointer;
 }
 
 .menu-button-dark:active,
@@ -218,6 +220,7 @@ bright {
 .char-button.active {
     background-color: var(--color-light-gray);
     color: var(--color-black);
+    cursor: pointer;
 }
 
 .char-button:active,
@@ -293,6 +296,7 @@ bright {
 .goto .menu-button:hover {
     background-color: var(--color-light-gray);
     color: var(--color-black);
+    cursor: pointer;
 }
 
 .goto .menu-button:active,
@@ -305,6 +309,7 @@ bright {
 .goto .menu-button:active bright,
 .goto .menu-button.pressed bright {
     color: var(--color-brown);
+    cursor: pointer;
 }
 
 .canvas-area {
@@ -334,6 +339,7 @@ bright {
 
 .help-text .menu-button:hover {
     background-color: var(--color-light-magenta);
+    cursor: pointer;
 }
 
 .help-text .menu-button:active,
@@ -385,6 +391,7 @@ bright {
 
 .title-button:hover {
     background-color: var(--color-light-blue);
+    cursor: pointer;
 }
 
 .title-button:active {
@@ -450,4 +457,23 @@ bright {
     height: calc(32px * (25 - 2));
     image-rendering: pixelated;
     image-rendering: crisp-edges;
+}
+
+.hyper-link-button {
+    height: 100%;
+    line-height: 100%;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    outline: none;
+    padding: 0 16px;
+    margin: 0;
+    font: inherit;
+    color: var(--color-blue);
+    flex-shrink: 0;
+}
+
+.hyper-link-button:hover {
+    color: var(--color-light-blue);
+    cursor: pointer
 }
