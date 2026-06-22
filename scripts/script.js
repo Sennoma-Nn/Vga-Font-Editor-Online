@@ -380,7 +380,7 @@ function updateMenu() {
             break;
         case 'about':
             actionButtons = `
-                <button class="menu-button" onclick="bakcMainMenu()">${lang('BakcMainMenu')}</button>
+                <button class="menu-button" onclick="bakcMainMenu()">${lang('BackMainMenu')}</button>
                 <span>|&nbsp;</span>
                 <span>VGA FONT EDITOR ONLINE ${editorData.about.version}</span>
                 <span>&nbsp;|</span>
