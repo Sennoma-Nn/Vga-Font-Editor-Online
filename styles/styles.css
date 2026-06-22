@@ -111,6 +111,10 @@ span {
     scrollbar-width: none;
 }
 
+.menu-bar bright {
+    color: var(--color-brown)
+}
+
 .menu-bar-button-area,
 .menu-bar-warning-area {
     flex-shrink: 0;

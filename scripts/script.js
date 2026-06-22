@@ -11,6 +11,7 @@ let editorData = {
             index: 0,
             changedData: '',
             mode: 'normal',
+            codePage: '437',
             fontInfo: {
                 height: 16,
                 data: []
@@ -349,12 +350,15 @@ function updateMenu() {
     switch (editorData.menuMode) {
         case 'normal':
             actionButtons = `
+                <span>&nbsp;<bright none>♦</bright> + [</span>
                 <button class="menu-button" onclick="menuReset()">${lang('Reset')}</button>
                 <button class="menu-button" onclick="menuRenameFont()">${lang('Rename')}</button>
                 <button class="menu-button" onclick="menuOpenFont()">${lang('Open')}</button>
                 <button class="menu-button" onclick="menuSaveFont()">${lang('Save')}</button>
                 <button class="menu-button" onclick="menuPreviewFont()">${lang('Preview')}</button>
                 <button class="menu-button" onclick="menuAbout()">${lang('About')}</button>
+                <span>]</span>
+                <button class="menu-button" onclick="">Test</button>
             `;
             break;
         case 'reset':
@@ -406,21 +410,27 @@ function shortName(text) {
     return text;
 }
 
+function getCharDescriptionsList() {
+    let cp = getTabData('codePage')
+    let list = lang('CharDescriptions', false)[cp] ?? lang('CharDescriptions', false)['437']
+    return list;
+}
+
 function updateTitle(isWarning = false) {
     const index = getTabData('index');
     const charTitle = document.getElementById('char-title');
 
     let descriptionsText = '';
     if (getTabData('mode') === 'normal') {
-        descriptionsText = toFullWidthTag(truncateText(lang('CharDescriptions', false)[index]));
+        descriptionsText = toFullWidthTag(truncateText(getCharDescriptionsList()[index]));
     } else if (getTabData('mode') === 'edit') {
-        descriptionsText = toFullWidthTag(shortName((lang('CharDescriptions', false)[index])));
+        descriptionsText = toFullWidthTag(shortName((getCharDescriptionsList()[index])));
     }
 
     const descriptions = getTabData('mode') === 'normal' || getTabData('mode') === 'edit'
         ? `
             <span>&nbsp;#${index}:&nbsp;</span>
-                <span style="color: var(--color-light-gray)" title="${lang('CharDescriptions', false)[index].replace(/"/g, '&quot;')}">
+                <span style="color: var(--color-light-gray)" title="${getCharDescriptionsList()[index].replace(/"/g, '&quot;')}">
                     ${descriptionsText}
                 </span>
             <span>&nbsp;&nbsp;|&nbsp;</span>
@@ -441,19 +451,22 @@ function updateTitle(isWarning = false) {
             const canPaste = isCharEmpty(getTabData('index'));
             actionButtons = `
                 <button class="title-button" onclick="editChar()">${lang('Edit')}</button>
-                <span>&nbsp;|&nbsp;</span>
+                <span>&nbsp;|&nbsp;&nbsp;<bright none>^</bright> + [</span>
                 <button class="title-button" onclick="layerCopy()">${lang('Copy')}</button>
                 ${canPaste
                     ? `<button class="title-button" onclick="layerPaste()">${lang('Paste')}</button>`
                     : `<span style="color:var(--color-dark-gray)">&nbsp;${lang('Paste')}&nbsp;</span>`
                 }
+                <span>]</span>
             `;
             break;
         case 'edit':
             actionButtons = `
+                <span>&nbsp;<bright none>^</bright> + [</span>
                 <button class="title-button" onclick="editLayer()">${lang('Glyph')}</button>
                 <button class="title-button" onclick="editTransform()">${lang('Transform')}</button>
                 <button class="title-button" onclick="editShift()">${lang('Shift')}</button>
+                <span>]&nbsp;</span>
             `;
             break;
         case 'layer':

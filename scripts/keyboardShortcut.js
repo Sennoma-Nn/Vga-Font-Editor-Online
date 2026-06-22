@@ -67,11 +67,16 @@ document.addEventListener('keydown', (e) => {
     const k = key2Symbol(e.key.toUpperCase());
 
     const btn = Array.from(document.querySelectorAll('button'))
-        .find(b => b.offsetParent !== null && getBrightKey(b) === k);
+        .find(b => {
+            if (b.offsetParent === null) return false;
+            const bk = getBrightKey(b);
+            return bk && matchBrightKey(bk, k, e);
+        });
 
     if (btn) {
         btn.classList.add('pressed');
         activePressedBtn = btn;
+        e.preventDefault();
     }
 });
 
@@ -80,21 +85,52 @@ document.addEventListener('keyup', (e) => {
 
     const k = key2Symbol(e.key.toUpperCase());
 
-    if (activePressedBtn && getBrightKey(activePressedBtn) === k) {
-        const btn = activePressedBtn;
-        activePressedBtn = null;
-        btn.classList.remove('pressed');
-        btn.click();
+    if (activePressedBtn) {
+        const bk = getBrightKey(activePressedBtn);
+        if (bk && matchBrightKey(bk, k, e)) {
+            const btn = activePressedBtn;
+            activePressedBtn = null;
+            btn.classList.remove('pressed');
+            btn.click();
+        } else if (bk && bk.key === k) {
+            const btn = activePressedBtn;
+            activePressedBtn = null;
+            btn.classList.remove('pressed');
+            btn.click();
+        }
     } else {
         document.querySelectorAll('button').forEach(btn => {
-            if (getBrightKey(btn) === k) btn.classList.remove('pressed');
+            const bk = getBrightKey(btn);
+            if (bk && matchBrightKey(bk, k, e)) {
+                btn.classList.remove('pressed');
+            }
         });
     }
 });
 
+function matchBrightKey(bk, key, e) {
+    if (bk.none) return false;
+    if (bk.key !== key) return false;
+    if (bk.modifier === 'alt' && (!e.altKey || e.ctrlKey || e.metaKey)) return false;
+    if (bk.modifier === 'ctrl' && (!e.ctrlKey || e.altKey || e.metaKey)) return false;
+    if (bk.modifier === 'meta' && (!e.metaKey || e.altKey || e.ctrlKey)) return false;
+    if (!bk.modifier && (e.altKey || e.ctrlKey || e.metaKey)) return false;
+    return true;
+}
+
 function getBrightKey(button) {
-    const bb = button.querySelector('bright');
-    return bb ? bb.innerText.trim().toUpperCase() : null;
+    const bbs = button.querySelectorAll('bright');
+    if (!bbs.length) return null;
+    let bb = null;
+    for (const b of bbs) {
+        if (!b.hasAttribute('none')) bb = b;
+    }
+    if (!bb) return null;
+    return {
+        key: bb.innerText.trim().toUpperCase(),
+        modifier: bb.getAttribute('modifier'),
+        none: bb.hasAttribute('none')
+    };
 }
 
 function key2Symbol(k) {
