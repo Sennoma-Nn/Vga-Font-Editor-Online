@@ -146,7 +146,8 @@ bright {
     color: var(--color-brown);
 }
 
-.menu-button:hover {
+.menu-button:hover,
+.menu-button.hover {
     background-color: var(--color-light-gray);
     cursor: pointer;
 }
@@ -393,7 +394,8 @@ bright {
     flex-shrink: 0;
 }
 
-.title-button:hover {
+.title-button:hover,
+.title-button.hover {
     background-color: var(--color-light-blue);
     cursor: pointer;
 }
@@ -413,6 +415,43 @@ bright {
 }
 
 .title-button.pressed bright {
+    color: var(--color-brown);
+}
+
+#glyph-dropdown-menu,
+#transform-dropdown-menu,
+#shift-dropdown-menu {
+    background-color: var(--color-blue);
+}
+
+#glyph-dropdown-menu .menu-item,
+#transform-dropdown-menu .menu-item,
+#shift-dropdown-menu .menu-item {
+    color: var(--color-white);
+}
+
+#glyph-dropdown-menu .menu-item:hover,
+#transform-dropdown-menu .menu-item:hover,
+#shift-dropdown-menu .menu-item:hover {
+    background-color: var(--color-light-blue);
+}
+
+#glyph-dropdown-menu .menu-item:active,
+#glyph-dropdown-menu .menu-item.pressed,
+#transform-dropdown-menu .menu-item:active,
+#transform-dropdown-menu .menu-item.pressed,
+#shift-dropdown-menu .menu-item:active,
+#shift-dropdown-menu .menu-item.pressed {
+    background-color: var(--color-white);
+    color: var(--color-black);
+}
+
+#glyph-dropdown-menu .menu-item:active bright,
+#glyph-dropdown-menu .menu-item.pressed bright,
+#transform-dropdown-menu .menu-item:active bright,
+#transform-dropdown-menu .menu-item.pressed bright,
+#shift-dropdown-menu .menu-item:active bright,
+#shift-dropdown-menu .menu-item.pressed bright {
     color: var(--color-brown);
 }
 
@@ -480,4 +519,65 @@ bright {
 .hyper-link-button:hover {
     color: var(--color-light-blue);
     cursor: pointer
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: var(--color-white);
+    z-index: 20000;
+    white-space: nowrap;
+    padding: 0;
+}
+
+.dropdown-menu.show {
+    display: block;
+    box-shadow: 32px 32px 0 0 var(--color-dark-gray);
+}
+
+.dropdown-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu-item {
+    padding: 0 16px;
+    line-height: 32px;
+    cursor: pointer;
+    white-space: nowrap;
+    position: relative;
+    color: var(--color-black);
+}
+
+.menu-item:hover:not(:has(.menu-item:hover)) {
+    background-color: var(--color-light-gray);
+}
+
+.menu-item:active:not(:has(.menu-item:active)),
+.menu-item.pressed {
+    background-color: var(--color-dark-gray);
+    color: var(--color-white);
+}
+
+.menu-item:active:not(:has(.menu-item:active)) bright,
+.menu-item.pressed bright {
+    color: var(--color-yellow);
+}
+
+.menu-item.has-submenu > .submenu {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: 0;
+    background-color: var(--color-white);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+}
+
+.menu-item.has-submenu.submenu-open > .submenu {
+    display: block;
+    box-shadow: 32px 32px 0 0 var(--color-dark-gray);
 }

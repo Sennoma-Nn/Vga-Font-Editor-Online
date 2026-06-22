@@ -351,35 +351,33 @@ function updateMenu() {
         case 'normal':
             actionButtons = `
                 <span>&nbsp;<bright none>♦</bright> + [</span>
-                <button class="menu-button" onclick="menuReset()">${lang('Reset')}</button>
+                <button class="menu-button" onclick="menuManager.toggle('reset-dropdown-menu', this)">${lang('Reset')}</button>
+                <div id="reset-dropdown-menu" class="dropdown-menu">
+                    <ul>
+                        <span style="color: var(--color-light-gray)">&nbsp;${lang('Size')}:</span>
+                        <li class="menu-item" onclick="resetResetButton(16)">8x1<bright>6</bright></li>
+                        <li class="menu-item" onclick="resetResetButton(14)">8x1<bright>4</bright></li>
+                        <li class="menu-item" onclick="resetResetButton(8)">8x<bright>8</bright></li>
+
+                        <br>
+
+                        <li class="menu-item has-submenu" onclick="toggleSubmenu(this)">
+                            ${lang('Templates')} ►
+                            <ul class="submenu">
+                                <li class="menu-item" onclick="event.stopPropagation(); loadTemplatesFrom('VGA-ROM.F16')"><bright>1</bright> VGA-ROM.F16</li>
+                                <li class="menu-item" onclick="event.stopPropagation(); loadTemplatesFrom('VGA-ROM.F14')"><bright>2</bright> VGA-ROM.F14</li>
+                                <li class="menu-item" onclick="event.stopPropagation(); loadTemplatesFrom('VGA-ROM.F08')"><bright>3</bright> VGA-ROM.F08</li>
+                                <li class="menu-item" onclick="event.stopPropagation(); loadTemplatesFrom('QUADBM.F08')"><bright>4</bright> QUADBM.F08</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
                 <button class="menu-button" onclick="menuRenameFont()">${lang('Rename')}</button>
                 <button class="menu-button" onclick="menuOpenFont()">${lang('Open')}</button>
                 <button class="menu-button" onclick="menuSaveFont()">${lang('Save')}</button>
                 <button class="menu-button" onclick="menuPreviewFont()">${lang('Preview')}</button>
                 <button class="menu-button" onclick="menuAbout()">${lang('About')}</button>
                 <span>]</span>
-                <button class="menu-button" onclick="">Test</button>
-            `;
-            break;
-        case 'reset':
-            actionButtons = `
-                <button class="menu-button" onclick="resetCancelReset()">${lang('CancelReset')}</button>
-                <span>|</span>
-                <button class="menu-button" onclick="resetLoadTemplates()">${lang('LoadTemplates')}</button>
-                <span>|&nbsp;</span>
-                <span>${lang('Size')}:&nbsp;</span>
-                <button class="menu-button" onclick="resetResetButton(16)">8x1<bright>6</bright>,</button>
-                <button class="menu-button" onclick="resetResetButton(14)">8x1<bright>4</bright>,</button>
-                <button class="menu-button" onclick="resetResetButton(8)">8x<bright>8</bright></button>
-            `;
-            break;
-        case 'templates':
-            actionButtons = `
-                <button class="menu-button" onclick="templatesCancelLoadTemplates()">${lang('CancelLoadTemplates')}</button>
-                <span>|&nbsp;</span>
-                <span>${lang('Select')}:&nbsp;</span>
-                <button class="menu-button" onclick="loadTemplatesFrom('IBM_8X16.RAW')"><bright>1</bright>.IBM_8X16,</button>
-                <button class="menu-button" onclick="loadTemplatesFrom('QUADBM_8X8.RAW')"><bright>2</bright>.QUADBM_8X8</button>
             `;
             break;
         case 'about':
@@ -463,39 +461,33 @@ function updateTitle(isWarning = false) {
         case 'edit':
             actionButtons = `
                 <span>&nbsp;<bright none>^</bright> + [</span>
-                <button class="title-button" onclick="editLayer()">${lang('Glyph')}</button>
-                <button class="title-button" onclick="editTransform()">${lang('Transform')}</button>
-                <button class="title-button" onclick="editShift()">${lang('Shift')}</button>
+                <button class="title-button" onclick="menuManager.toggle('glyph-dropdown-menu', this)">${lang('Glyph')}</button>
+                <div id="glyph-dropdown-menu" class="dropdown-menu">
+                    <ul>
+                        <li class="menu-item" onclick="${closeMenu('glyph-dropdown-menu')}; layerCopy()">${lang('Copy')}</li>
+                        <li class="menu-item" onclick="${closeMenu('glyph-dropdown-menu')}; layerPaste()">${lang('Paste')}</li>
+                        <li class="menu-item" onclick="${closeMenu('glyph-dropdown-menu')}; layerClear()">${lang('Clear')}</li>
+                    </ul>
+                </div>
+                <button class="title-button" onclick="menuManager.toggle('transform-dropdown-menu', this)">${lang('Transform')}</button>
+                <div id="transform-dropdown-menu" class="dropdown-menu">
+                    <ul>
+                        <li class="menu-item" onclick="${closeMenu('transform-dropdown-menu')}; transformReverse()">${lang('Reverse')}</li>
+                        <li class="menu-item" onclick="${closeMenu('transform-dropdown-menu')}; transformFlipHorizontal()">${lang('FlipH')}</li>
+                        <li class="menu-item" onclick="${closeMenu('transform-dropdown-menu')}; transformFlipVertical()">${lang('FlipV')}</li>
+                    </ul>
+                </div>
+                <button class="title-button" onclick="menuManager.toggle('shift-dropdown-menu', this)">${lang('Shift')}</button>
+                <div id="shift-dropdown-menu" class="dropdown-menu">
+                    <ul>
+                        <li class="menu-item" onclick="${closeMenu('shift-dropdown-menu')}; shiftLeft()"><bright>◄</bright> ${lang('Left')}</li>
+                        <li class="menu-item" onclick="${closeMenu('shift-dropdown-menu')}; shiftDown()"><bright>▼</bright> ${lang('Right')}</li>
+                        <li class="menu-item" onclick="${closeMenu('shift-dropdown-menu')}; shiftUp()"><bright>▲</bright> ${lang('Up')}</li>
+                        <li class="menu-item" onclick="${closeMenu('shift-dropdown-menu')}; shiftRight()"><bright>►</bright> ${lang('Down')}</li>
+                    </ul>
+                </div>
                 <span>]&nbsp;</span>
             `;
-            break;
-        case 'layer':
-            actionButtons = `
-                <button class="title-button" onclick="editBack()">${lang('Back')}</button>
-                <span>&nbsp;|&nbsp;</span>
-                <button class="title-button" onclick="layerCopy()">${lang('Copy')}</button>
-                <button class="title-button" onclick="layerPaste()">${lang('Paste')}</button>
-                <button class="title-button" onclick="layerClear()">${lang('Clear')}</button>
-            `;
-            break;
-        case 'transform':
-            actionButtons = `
-                <button class="title-button" onclick="editBack()">${lang('Back')}</button>
-                <span>&nbsp;|&nbsp;</span>
-                <button class="title-button" onclick="transformReverse()">${lang('Reverse')}</button>
-                <button class="title-button" onclick="transformFlipHorizontal()">${lang('FlipH')}</button>
-                <button class="title-button" onclick="transformFlipVertical()">${lang('FlipV')}</button>
-            `;
-            break;
-        case 'shift':
-            actionButtons = `
-                <button class="title-button" onclick="editBack()">${lang('Back')}</button>
-                <span>&nbsp;|&nbsp;</span>
-                <button class="title-button" onclick="shiftLeft()"><bright>◄</bright></button>
-                <button class="title-button" onclick="shiftDown()"><bright>▼</bright></button>
-                <button class="title-button" onclick="shiftUp()"><bright>▲</bright></button>
-                <button class="title-button" onclick="shiftRight()"><bright>►</bright></button>
-            `
             break;
     }
 
@@ -622,11 +614,6 @@ function updatePreviewCanvas() {
     drawArr(ctx, testBlock, 33, 16, fontHeight);
 }
 
-function menuReset() {
-    editorData.menuMode = 'reset';
-    updateMenu();
-}
-
 function menuAbout() {
     editorData.menuMode = 'about';
     updateMenu();
@@ -641,29 +628,14 @@ function viewOnGitHub() {
     window.open(editorData.about.github);
 }
 
-function resetCancelReset() {
-    editorData.menuMode = 'normal';
-    updateMenu();
-}
-
-function resetLoadTemplates() {
-    editorData.menuMode = 'templates';
-    updateMenu();
-}
-
-function templatesCancelLoadTemplates() {
-    editorData.menuMode = 'reset';
-    updateMenu();
-}
-
 function resetResetButton(h) {
     resetCharsData(h);
-    resetCancelReset();
+    updateMenu();
 }
 
 function loadTemplatesFrom(name) {
     openFontFromURL(`./fontTemplates/${name}`)
-    resetCancelReset();
+    updateMenu();
 }
 
 function transformFlipHorizontal() {
@@ -695,26 +667,6 @@ function transformFlipVertical() {
 
     setTabData('changedData', newData);
     renderCanvas();
-}
-
-function editBack() {
-    setTabData('mode', 'edit')
-    updateTitle()
-}
-
-function editLayer() {
-    setTabData('mode', 'layer')
-    updateTitle()
-}
-
-function editTransform() {
-    setTabData('mode', 'transform')
-    updateTitle()
-}
-
-function editShift() {
-    setTabData('mode', 'shift')
-    updateTitle()
 }
 
 function shiftUp() {
@@ -799,7 +751,6 @@ function layerPaste() {
         setTabData('changedData', newData);
         renderCanvas();
         updateTitle();
-        editShift();
     } else {
         let truncated = editorData.clipboard.data.slice(0, 8 * layerHeight);
 

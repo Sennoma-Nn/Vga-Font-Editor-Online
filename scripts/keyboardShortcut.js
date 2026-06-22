@@ -61,14 +61,22 @@ document.addEventListener('keydown', (e) => {
         const prevBtn = activePressedBtn;
         activePressedBtn = null;
         prevBtn.classList.remove('pressed');
-        prevBtn.click();
+        prevBtn.dispatchEvent(new MouseEvent('click', { shiftKey: e.shiftKey }));
     }
 
     const k = key2Symbol(e.key.toUpperCase());
 
-    const btn = Array.from(document.querySelectorAll('button'))
+    const openMenus = document.querySelectorAll('.dropdown-menu.show');
+    let scope = document;
+    if (openMenus.length) {
+        const lastMenu = openMenus[openMenus.length - 1];
+        const submenus = lastMenu.querySelectorAll('.submenu-open');
+        scope = submenus.length ? submenus[submenus.length - 1] : lastMenu;
+    }
+
+    const btn = Array.from(scope.querySelectorAll('button, .menu-item'))
         .find(b => {
-            if (b.offsetParent === null) return false;
+            if (b.offsetParent === null && !b.closest('.dropdown-menu.show')) return false;
             const bk = getBrightKey(b);
             return bk && matchBrightKey(bk, k, e);
         });
@@ -91,15 +99,15 @@ document.addEventListener('keyup', (e) => {
             const btn = activePressedBtn;
             activePressedBtn = null;
             btn.classList.remove('pressed');
-            btn.click();
+            btn.dispatchEvent(new MouseEvent('click', { shiftKey: e.shiftKey }));
         } else if (bk && bk.key === k) {
             const btn = activePressedBtn;
             activePressedBtn = null;
             btn.classList.remove('pressed');
-            btn.click();
+            btn.dispatchEvent(new MouseEvent('click', { shiftKey: e.shiftKey }));
         }
     } else {
-        document.querySelectorAll('button').forEach(btn => {
+        document.querySelectorAll('button, .menu-item').forEach(btn => {
             const bk = getBrightKey(btn);
             if (bk && matchBrightKey(bk, k, e)) {
                 btn.classList.remove('pressed');
@@ -123,7 +131,10 @@ function getBrightKey(button) {
     if (!bbs.length) return null;
     let bb = null;
     for (const b of bbs) {
-        if (!b.hasAttribute('none')) bb = b;
+        if (!b.hasAttribute('none')) {
+            if (button.tagName === 'BUTTON') bb = b;
+            else if (b.parentElement === button || b.parentElement.parentElement === button) bb = b;
+        }
     }
     if (!bb) return null;
     return {
@@ -135,10 +146,10 @@ function getBrightKey(button) {
 
 function key2Symbol(k) {
     switch (k) {
-        case 'ARROWUP': return '↑';
-        case 'ARROWDOWN': return '↓';
-        case 'ARROWLEFT': return '←';
-        case 'ARROWRIGHT': return '→';
+        case 'ARROWUP': return '▲';
+        case 'ARROWDOWN': return '▼';
+        case 'ARROWLEFT': return '◄';
+        case 'ARROWRIGHT': return '►';
         default: return k;
     }
 }
