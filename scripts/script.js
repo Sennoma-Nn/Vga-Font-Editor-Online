@@ -481,9 +481,9 @@ function updateTitle(isWarning = false) {
                 <div id="shift-dropdown-menu" class="dropdown-menu">
                     <ul>
                         <li class="menu-item" onclick="${closeMenu('shift-dropdown-menu')}; shiftLeft()"><bright>◄</bright> ${lang('Left')}</li>
-                        <li class="menu-item" onclick="${closeMenu('shift-dropdown-menu')}; shiftDown()"><bright>▼</bright> ${lang('Right')}</li>
+                        <li class="menu-item" onclick="${closeMenu('shift-dropdown-menu')}; shiftDown()"><bright>▼</bright> ${lang('Down')}</li>
                         <li class="menu-item" onclick="${closeMenu('shift-dropdown-menu')}; shiftUp()"><bright>▲</bright> ${lang('Up')}</li>
-                        <li class="menu-item" onclick="${closeMenu('shift-dropdown-menu')}; shiftRight()"><bright>►</bright> ${lang('Down')}</li>
+                        <li class="menu-item" onclick="${closeMenu('shift-dropdown-menu')}; shiftRight()"><bright>►</bright> ${lang('Right')}</li>
                     </ul>
                 </div>
                 <span>]&nbsp;</span>
