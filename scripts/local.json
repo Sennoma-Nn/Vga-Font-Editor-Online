@@ -590,7 +590,7 @@
         ]
     },
     "zh-tw": {
-        "UiFont": "MBytePC230, UnifontTW",
+        "UiFont": "MBytePC230, Nightgazer16",
         "FullWidthYOffset": "4px",
         "Reset": "重置(<bright>R</bright>)",
         "CancelReset": "取消重置(<bright>R</bright>)",
