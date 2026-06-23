@@ -1,6 +1,6 @@
 let editorData = {
     about: {
-        version: '0.2.0',
+        version: '0.2.1',
         github: 'https://github.com/Sennoma-Nn/Vga-Font-Editor-Online'
     },
     tab: 0,
@@ -132,7 +132,7 @@ async function resetCharsData(h) {
 function askIsAbandon() {
     return new Promise((resolve) => {
         if (isProjDirty()) {
-            const abandonDiv = document.getElementById('menu-bar-warning-area');
+            const abandonDiv = document.getElementById('top-menu-bar-warning-area');
             if (abandonDiv.querySelector('.menu-button')) {
                 resolve(false);
                 return;
@@ -156,7 +156,7 @@ function askIsAbandon() {
 }
 
 function showError(message) {
-    const errorDiv = document.getElementById('menu-bar-warning-area');
+    const errorDiv = document.getElementById('top-menu-bar-warning-area');
     errorDiv.innerHTML = `
         <span style="color: var(--color-red)">&nbsp;* Error: ${message}</span>
     `;
@@ -351,7 +351,7 @@ function debug() {
 }
 
 function updateMenu() {
-    const menuBarButtonArea = document.getElementById('menu-bar-button-area');
+    const menuBarButtonArea = document.getElementById('top-menu-bar-button-area');
 
     let actionButtons = '';
 
@@ -1023,7 +1023,7 @@ function gotoInputStart() {
 }
 
 function changeTab(tab) {
-    const warningDiv = document.getElementById('menu-bar-warning-area');
+    const warningDiv = document.getElementById('top-menu-bar-warning-area');
     const previewDiv = document.getElementById('preview');
 
     const confirmNoBtn = warningDiv ? warningDiv.querySelector('#confirmNo') : null;
