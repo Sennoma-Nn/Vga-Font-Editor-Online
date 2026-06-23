@@ -350,7 +350,6 @@ function updateMenu() {
     switch (editorData.menuMode) {
         case 'normal':
             actionButtons = `
-                <span>&nbsp;<bright none>♦</bright> + [</span>
                 <button class="menu-button" onclick="menuManager.toggle('reset-dropdown-menu', this)">${lang('Reset')}</button>
                 <div id="reset-dropdown-menu" class="dropdown-menu">
                     <ul>
@@ -377,7 +376,6 @@ function updateMenu() {
                 <button class="menu-button" onclick="menuSaveFont()">${lang('Save')}</button>
                 <button class="menu-button" onclick="menuPreviewFont()">${lang('Preview')}</button>
                 <button class="menu-button" onclick="menuAbout()">${lang('About')}</button>
-                <span>]</span>
             `;
             break;
         case 'about':
@@ -431,15 +429,17 @@ function updateTitle(isWarning = false) {
                 <span style="color: var(--color-light-gray)" title="${getCharDescriptionsList()[index].replace(/"/g, '&quot;')}">
                     ${descriptionsText}
                 </span>
-            <span>&nbsp;&nbsp;|&nbsp;</span>
+            <span>&nbsp;|</span>
         ` : '';
 
     const saveTexts = isEditing() ? `
-        <span>&nbsp;|&nbsp;&nbsp;</span>
-        <span style="color: var(${isWarning ? '--color-brown' : '--color-white'})">${isWarning ? '☼ ' : ''}${lang('SaveQ')}</span>
-        &nbsp;
-        <button class="title-button" onclick="saveChanges()">${lang('Yes')}</button>
-        <button class="title-button" onclick="undoChanges()">${lang('No')}</button>
+        <button class="title-button" onclick="menuManager.toggle('change-dropdown-menu', this)" ${isWarning ? 'style="color: var(--color-brown)"' : ''}>${isWarning ? '☼ ' : ''}${lang('Change')}</button>
+        <div id="change-dropdown-menu" class="dropdown-menu">
+            <ul>
+                <li class="menu-item" onclick="${closeMenu('change-dropdown-menu')}; saveChanges()">${lang('SaveGlyph')}</li>
+                <li class="menu-item" onclick="${closeMenu('change-dropdown-menu')}; undoChanges()">${lang('DontSaveGlyph')}</li>
+            </ul>
+        </div>
     ` : '';
 
     let actionButtons = '';
@@ -449,18 +449,15 @@ function updateTitle(isWarning = false) {
             const canPaste = isCharEmpty(getTabData('index'));
             actionButtons = `
                 <button class="title-button" onclick="editChar()">${lang('Edit')}</button>
-                <span>&nbsp;|&nbsp;&nbsp;<bright none>^</bright> + [</span>
-                <button class="title-button" onclick="layerCopy()">${lang('Copy')}</button>
+                <button class="title-button" onclick="layerCopy()">${lang('FastCopy')}</button>
                 ${canPaste
-                    ? `<button class="title-button" onclick="layerPaste()">${lang('Paste')}</button>`
-                    : `<span style="color:var(--color-dark-gray)">&nbsp;${lang('Paste')}&nbsp;</span>`
+                    ? `<button class="title-button" onclick="layerPaste()">${lang('FastPaste')}</button>`
+                    : `<span style="color:var(--color-dark-gray)">&nbsp;${lang('FastPaste')}&nbsp;</span>`
                 }
-                <span>]</span>
             `;
             break;
         case 'edit':
             actionButtons = `
-                <span>&nbsp;<bright none>^</bright> + [</span>
                 <button class="title-button" onclick="menuManager.toggle('glyph-dropdown-menu', this)">${lang('Glyph')}</button>
                 <div id="glyph-dropdown-menu" class="dropdown-menu">
                     <ul>
@@ -480,13 +477,12 @@ function updateTitle(isWarning = false) {
                 <button class="title-button" onclick="menuManager.toggle('shift-dropdown-menu', this)">${lang('Shift')}</button>
                 <div id="shift-dropdown-menu" class="dropdown-menu">
                     <ul>
+                    <li class="menu-item" onclick="${closeMenu('shift-dropdown-menu')}; shiftUp()"><bright>▲</bright> ${lang('Up')}</li>
+                    <li class="menu-item" onclick="${closeMenu('shift-dropdown-menu')}; shiftDown()"><bright>▼</bright> ${lang('Down')}</li>
                         <li class="menu-item" onclick="${closeMenu('shift-dropdown-menu')}; shiftLeft()"><bright>◄</bright> ${lang('Left')}</li>
-                        <li class="menu-item" onclick="${closeMenu('shift-dropdown-menu')}; shiftDown()"><bright>▼</bright> ${lang('Down')}</li>
-                        <li class="menu-item" onclick="${closeMenu('shift-dropdown-menu')}; shiftUp()"><bright>▲</bright> ${lang('Up')}</li>
                         <li class="menu-item" onclick="${closeMenu('shift-dropdown-menu')}; shiftRight()"><bright>►</bright> ${lang('Right')}</li>
                     </ul>
                 </div>
-                <span>]&nbsp;</span>
             `;
             break;
     }

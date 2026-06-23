@@ -85,6 +85,11 @@ document.addEventListener('keydown', (e) => {
         btn.classList.add('pressed');
         activePressedBtn = btn;
         e.preventDefault();
+        return;
+    }
+
+    if (e.ctrlKey || e.altKey || e.metaKey) {
+        e.preventDefault();
     }
 });
 

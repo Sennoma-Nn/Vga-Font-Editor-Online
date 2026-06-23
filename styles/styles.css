@@ -400,6 +400,11 @@ bright {
     cursor: pointer;
 }
 
+.title-button:hover bright,
+.title-button.hover bright {
+    color: var(--color-brown);
+}
+
 .title-button:active {
     background-color: var(--color-white);
     color: var(--color-black)
@@ -420,20 +425,37 @@ bright {
 
 #glyph-dropdown-menu,
 #transform-dropdown-menu,
-#shift-dropdown-menu {
+#shift-dropdown-menu,
+#change-dropdown-menu {
     background-color: var(--color-blue);
 }
 
 #glyph-dropdown-menu .menu-item,
 #transform-dropdown-menu .menu-item,
-#shift-dropdown-menu .menu-item {
+#shift-dropdown-menu .menu-item,
+#change-dropdown-menu .menu-item {
     color: var(--color-white);
+}
+
+#glyph-dropdown-menu .menu-item bright,
+#transform-dropdown-menu .menu-item bright,
+#shift-dropdown-menu .menu-item bright,
+#change-dropdown-menu .menu-item bright {
+    color: var(--color-yellow);
 }
 
 #glyph-dropdown-menu .menu-item:hover,
 #transform-dropdown-menu .menu-item:hover,
-#shift-dropdown-menu .menu-item:hover {
+#shift-dropdown-menu .menu-item:hover,
+#change-dropdown-menu .menu-item:hover {
     background-color: var(--color-light-blue);
+}
+
+#glyph-dropdown-menu .menu-item:hover > bright,
+#transform-dropdown-menu .menu-item:hover > bright,
+#shift-dropdown-menu .menu-item:hover > bright,
+#change-dropdown-menu .menu-item:hover > bright {
+    color: var(--color-brown);
 }
 
 #glyph-dropdown-menu .menu-item:active,
@@ -441,7 +463,9 @@ bright {
 #transform-dropdown-menu .menu-item:active,
 #transform-dropdown-menu .menu-item.pressed,
 #shift-dropdown-menu .menu-item:active,
-#shift-dropdown-menu .menu-item.pressed {
+#shift-dropdown-menu .menu-item.pressed,
+#change-dropdown-menu .menu-item:active,
+#change-dropdown-menu .menu-item.pressed {
     background-color: var(--color-white);
     color: var(--color-black);
 }
@@ -451,7 +475,9 @@ bright {
 #transform-dropdown-menu .menu-item:active bright,
 #transform-dropdown-menu .menu-item.pressed bright,
 #shift-dropdown-menu .menu-item:active bright,
-#shift-dropdown-menu .menu-item.pressed bright {
+#shift-dropdown-menu .menu-item.pressed bright,
+#change-dropdown-menu .menu-item:active bright,
+#change-dropdown-menu .menu-item.pressed bright {
     color: var(--color-brown);
 }
 
@@ -550,8 +576,18 @@ bright {
     color: var(--color-black);
 }
 
-.menu-item:hover:not(:has(.menu-item:hover)) {
+.menu-item bright {
+    color: var(--color-brown);
+}
+
+.menu-item:hover:not(:has(.menu-item:hover)),
+.menu-item.submenu-open {
     background-color: var(--color-light-gray);
+}
+
+.menu-item:hover > bright,
+.menu-item.submenu-open > bright {
+    color: var(--color-yellow);
 }
 
 .menu-item:active:not(:has(.menu-item:active)),
@@ -560,8 +596,8 @@ bright {
     color: var(--color-white);
 }
 
-.menu-item:active:not(:has(.menu-item:active)) bright,
-.menu-item.pressed bright {
+.menu-item:active:not(:has(.menu-item:active)) > bright,
+.menu-item.pressed > bright {
     color: var(--color-yellow);
 }
 
