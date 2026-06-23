@@ -1,6 +1,6 @@
 let editorData = {
     about: {
-        version: '0.1.2',
+        version: '0.2.0',
         github: 'https://github.com/Sennoma-Nn/Vga-Font-Editor-Online'
     },
     tab: 0,
@@ -23,6 +23,10 @@ let editorData = {
     clipboard: {
         data: '',
         height: NaN
+    },
+    setting: {
+        showHelp: true,
+        metaKey: 'alt'
     }
 }
 
@@ -319,9 +323,13 @@ async function menuSaveFont() {
 function menuPreviewFont() {
     updatePreviewCanvas();
     const previewDiv = document.getElementById('preview');
+    const settingsDiv = document.getElementById('settings');
+
     if (previewDiv.style.display === 'none' || previewDiv.style.display === '') {
         previewDiv.style.display = 'block';
     } else previewDiv.style.display = 'none'
+
+    settingsDiv.style.display = 'none'
 }
 
 function menuRenameFont() {
@@ -375,16 +383,7 @@ function updateMenu() {
                 <button class="menu-button" onclick="menuOpenFont()">${lang('Open')}</button>
                 <button class="menu-button" onclick="menuSaveFont()">${lang('Save')}</button>
                 <button class="menu-button" onclick="menuPreviewFont()">${lang('Preview')}</button>
-                <button class="menu-button" onclick="menuAbout()">${lang('About')}</button>
-            `;
-            break;
-        case 'about':
-            actionButtons = `
-                <button class="menu-button" onclick="bakcMainMenu()">${lang('BackMainMenu')}</button>
-                <span>|&nbsp;</span>
-                <span>VGA FONT EDITOR ONLINE ${editorData.about.version}</span>
-                <span>&nbsp;|</span>
-                <button class="hyper-link-button" onclick="viewOnGitHub()">${lang('ViewOnGitHub')}</button>
+                <button class="menu-button" onclick="menuSettings()">${lang('Settings')}</button>
             `;
             break;
     }
@@ -610,9 +609,59 @@ function updatePreviewCanvas() {
     drawArr(ctx, testBlock, 33, 16, fontHeight);
 }
 
-function menuAbout() {
-    editorData.menuMode = 'about';
-    updateMenu();
+function menuSettings() {
+    const previewDiv = document.getElementById('preview');
+    const settingsDiv = document.getElementById('settings');
+
+    previewDiv.style.display = 'none'
+
+    if (settingsDiv.style.display === 'none' || settingsDiv.style.display === '') {
+        settingsDiv.style.display = 'block';
+    } else settingsDiv.style.display = 'none'
+
+    updateSetting(settingsDiv);
+}
+
+function updateSetting(settingsDiv) {
+    const showHelp = editorData.setting.showHelp;
+    const metaKey = editorData.setting.metaKey;
+    settingsDiv.innerHTML = `
+        <span style="position: absolute; top: calc(32px * 1); left: 16px">
+            VGA FONT EDITOR ONLINE -- V${editorData.about.version}
+        </span>
+
+        <button style="position: absolute; top: calc(32px * 2); left: 16px" class="hyper-link-button" onclick="viewOnGitHub()">
+            ${lang('ViewOnGitHub')}
+        </button>
+
+        <span style="position: absolute; top: calc(32px * 4); left: 0">
+            <button class="menu-button-dark" onclick="toggleShowHelp()">
+                ${lang('ShowHelp')}: ${showHelp ? lang('ShowHelpYes') : lang('ShowHelpNo')}
+            </button>
+        </span>
+
+        <span style="position: absolute; top: calc(32px * 5); left: 0">
+            <button class="menu-button-dark" onclick="toggleMetaKey()">
+                ${lang('MetaKeyIs')}: ${metaKey === 'alt' ? lang('AltKey') : lang('MetaKey')}
+            </button>
+        </span>
+    `
+}
+
+function toggleMetaKey() {
+    editorData.setting.metaKey = editorData.setting.metaKey === 'alt' ? 'meta' : 'alt';
+    localStorage.setItem('metaKey', editorData.setting.metaKey);
+
+    const settingsDiv = document.getElementById('settings');
+    updateSetting(settingsDiv);
+}
+
+function toggleShowHelp() {
+    editorData.setting.showHelp = !editorData.setting.showHelp;
+    localStorage.setItem('showHelp', editorData.setting.showHelp);
+
+    const settingsDiv = document.getElementById('settings');
+    updateSetting(settingsDiv);
 }
 
 function bakcMainMenu() {
@@ -881,11 +930,10 @@ function undoChanges() {
     updateTitle();
 }
 
-function helpDisenable() {
+function closeHelp() {
     const helpDiv = document.getElementById('help-text');
     if (helpDiv) {
         helpDiv.style.display = 'none';
-        localStorage.setItem('helpDisenable', 'true');
     }
 }
 

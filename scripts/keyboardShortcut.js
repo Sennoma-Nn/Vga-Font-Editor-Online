@@ -88,9 +88,7 @@ document.addEventListener('keydown', (e) => {
         return;
     }
 
-    if (e.ctrlKey || e.altKey || e.metaKey) {
-        e.preventDefault();
-    }
+    if (e.ctrlKey || e.altKey || e.metaKey) e.preventDefault();
 });
 
 document.addEventListener('keyup', (e) => {
@@ -124,10 +122,16 @@ document.addEventListener('keyup', (e) => {
 function matchBrightKey(bk, key, e) {
     if (bk.none) return false;
     if (bk.key !== key) return false;
-    if (bk.modifier === 'alt' && (!e.altKey || e.ctrlKey || e.metaKey)) return false;
-    if (bk.modifier === 'ctrl' && (!e.ctrlKey || e.altKey || e.metaKey)) return false;
-    if (bk.modifier === 'meta' && (!e.metaKey || e.altKey || e.ctrlKey)) return false;
-    if (!bk.modifier && (e.altKey || e.ctrlKey || e.metaKey)) return false;
+    if (bk.modifier === 'ctrl' && (!e.ctrlKey || e.metaKey)) return false;
+    if (bk.modifier === 'meta') {
+        const useAlt = editorData.setting.metaKey === 'alt';
+        if (useAlt) {
+            if (!e.altKey || e.ctrlKey || e.metaKey) return false;
+        } else {
+            if (!e.metaKey || e.ctrlKey || e.altKey) return false;
+        }
+    }
+    if (!bk.modifier && (e.ctrlKey || e.metaKey || e.altKey)) return false;
     return true;
 }
 

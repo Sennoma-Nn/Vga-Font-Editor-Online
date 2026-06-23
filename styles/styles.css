@@ -194,7 +194,8 @@ bright {
 }
 
 .menu-button-dark:active bright,
-.menu-button-dark.pressed bright {
+.menu-button-dark.pressed bright,
+.menu-button-dark:hover bright {
     color: var(--color-brown);
 }
 
@@ -529,21 +530,19 @@ bright {
 }
 
 .hyper-link-button {
-    height: 100%;
-    line-height: 100%;
     background: transparent;
     border: none;
     box-shadow: none;
     outline: none;
-    padding: 0 16px;
+    padding: 0;
     margin: 0;
     font: inherit;
-    color: var(--color-blue);
+    color: var(--color-light-cyan);
     flex-shrink: 0;
 }
 
 .hyper-link-button:hover {
-    color: var(--color-light-blue);
+    color: var(--color-cyan);
     cursor: pointer
 }
 
@@ -616,4 +615,23 @@ bright {
 .menu-item.has-submenu.submenu-open > .submenu {
     display: block;
     box-shadow: 32px 32px 0 0 var(--color-dark-gray);
+}
+
+.settings {
+    position: absolute;
+    top: 64px;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 64px);
+    min-width: var(--web-min-width);
+    min-height: calc(var(--web-min-height) - 64px);
+    background-color: var(--color-dark-gray);
+    color: var(--color-white);
+    z-index: 9999;
+    display: none
+}
+
+.settings button {
+    height: 32px;
+    line-height: 32px;
 }

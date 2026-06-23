@@ -20,11 +20,13 @@
     charButtonArea.insertAdjacentHTML('beforeend', buttonsHTML);
 
     const container = document.querySelector('.canvars-and-help');
-    const isDisabled = localStorage.getItem('helpDisenable') === 'true';
+    const showHelp = localStorage.getItem('showHelp') === 'true';
+    const metaKey = localStorage.getItem('metaKey') === 'alt' ? 'alt' : 'meta';
 
-    if (!isDisabled) {
-        container.insertAdjacentHTML('beforeend', lang('HelpBlock'));
-    }
+    editorData.setting.showHelp = showHelp;
+    editorData.setting.metaKey = metaKey;
+
+    if (showHelp) container.insertAdjacentHTML('beforeend', lang('HelpBlock'));
 
     updateTabs();
     updateMenu();
