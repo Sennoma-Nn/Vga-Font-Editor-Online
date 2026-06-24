@@ -30,72 +30,6 @@ let editorData = {
     }
 }
 
-function escapeHTML(str) {
-    return str.replace(/[&<>'" ]/g,
-        tag => ({
-            '&': '&amp;',
-            '<': '&lt;',
-            '>': '&gt;',
-            "'": '&#39;',
-            '"': '&quot;',
-            ' ': '&nbsp;',
-        }[tag] || tag)
-    );
-}
-
-let getTabData = (data, tab = editorData.tab) => {
-    return editorData.tabsData[tab][data];
-}
-
-let setTabData = (data, val, tab = editorData.tab) => {
-    editorData.tabsData[tab][data] = val;
-}
-
-let getFontData = (data, tab = editorData.tab) => {
-    let font = editorData.tabsData[tab].fontInfo;
-    return font[data];
-}
-
-let setFontData = (data, val, tab = editorData.tab) => {
-    let font = editorData.tabsData[tab].fontInfo;
-    font[data] = val;
-}
-
-const isEditing = (tab = editorData.tab) => getTabData('mode', tab) !== 'normal';
-
-const isDirty = (tab = editorData.tab) => {
-    if (!isEditing(tab)) return false;
-    const changed = getTabData('changedData', tab);
-    const original = getFontData('data', tab)[getTabData('index', tab)];
-    return changed !== original;
-};
-
-
-const isCharEmpty = (i, tab = editorData.tab) => !getFontData('data', tab)[i].includes('1');
-
-const isProjDirty = (tab = editorData.tab) => {
-    for (let i = 0; i < getFontData('data', tab).length; i++) {
-        if (!isCharEmpty(i, tab)) return true;
-    }
-    return false;
-};
-
-const isAnyTabDirty = () => {
-    for (let i = 0; i < editorData.tabsData.length; i++) {
-        if (isDirty(i)) return true;
-    }
-    return false;
-};
-
-const isAnyProjDirty = () => {
-    for (let i = 0; i < editorData.tabsData.length; i++) {
-        if (isProjDirty(i)) return true;
-    }
-    return false;
-};
-
-const getEmptyData = (h = getFontData('height')) => "0".repeat(8 * h)
-
 function setEmptyData(h, tab) {
     setFontData('height', h, tab);
 
@@ -325,9 +259,8 @@ function menuPreviewFont() {
     const previewDiv = document.getElementById('preview');
     const settingsDiv = document.getElementById('settings');
 
-    if (previewDiv.style.display === 'none' || previewDiv.style.display === '') {
-        previewDiv.style.display = 'block';
-    } else previewDiv.style.display = 'none'
+    if (isPreviewOpen()) previewDiv.style.display = 'none';
+    else previewDiv.style.display = 'block'
 
     settingsDiv.style.display = 'none'
 }
@@ -417,9 +350,9 @@ function updateTitle(isWarning = false) {
 
     let descriptionsText = '';
     if (getTabData('mode') === 'normal') {
-        descriptionsText = toFullWidthTag(truncateText(getCharDescriptionsList()[index]));
+        descriptionsText = toShiftDownTag(truncateText(getCharDescriptionsList()[index]));
     } else if (getTabData('mode') === 'edit') {
-        descriptionsText = toFullWidthTag(shortName((getCharDescriptionsList()[index])));
+        descriptionsText = toShiftDownTag(shortName((getCharDescriptionsList()[index])));
     }
 
     const descriptions = getTabData('mode') === 'normal' || getTabData('mode') === 'edit'
@@ -615,9 +548,8 @@ function menuSettings() {
 
     previewDiv.style.display = 'none'
 
-    if (settingsDiv.style.display === 'none' || settingsDiv.style.display === '') {
-        settingsDiv.style.display = 'block';
-    } else settingsDiv.style.display = 'none'
+    if (isSettingOpen()) settingsDiv.style.display = 'none';
+    else settingsDiv.style.display = 'block'
 
     updateSetting(settingsDiv);
 }
@@ -625,24 +557,25 @@ function menuSettings() {
 function updateSetting(settingsDiv) {
     const showHelp = editorData.setting.showHelp;
     const metaKey = editorData.setting.metaKey;
+    const metaText = isMacOS() ? lang('CmdKey') : lang('MetaKey')
     settingsDiv.innerHTML = `
-        <span style="position: absolute; top: calc(32px * 1); left: 16px">
+        <span style="position: absolute; top: calc(32px * 1); left: 32px">
             VGA FONT EDITOR ONLINE -- V${editorData.about.version}
         </span>
 
-        <button style="position: absolute; top: calc(32px * 2); left: 16px" class="hyper-link-button" onclick="viewOnGitHub()">
+        <button style="position: absolute; top: calc(32px * 2); left: 32px" class="hyper-link-button" onclick="viewOnGitHub()">
             ${lang('ViewOnGitHub')}
         </button>
 
-        <span style="position: absolute; top: calc(32px * 4); left: 0">
-            <button class="menu-button-dark" onclick="toggleShowHelp()">
+        <span style="position: absolute; top: calc(32px * 4); left: 16px">
+            <button class="menu-button" onclick="toggleShowHelp()">
                 ${lang('ShowHelp')}: ${showHelp ? lang('ShowHelpYes') : lang('ShowHelpNo')}
             </button>
         </span>
 
-        <span style="position: absolute; top: calc(32px * 5); left: 0">
-            <button class="menu-button-dark" onclick="toggleMetaKey()">
-                ${lang('MetaKeyIs')}: ${metaKey === 'alt' ? lang('AltKey') : lang('MetaKey')}
+        <span style="position: absolute; top: calc(32px * 5); left: 16px">
+            <button class="menu-button" onclick="toggleMetaKey()">
+                ${lang('MetaKeyIs')}: ${metaKey === 'alt' ? lang('AltKey') : metaText}
             </button>
         </span>
     `

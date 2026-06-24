@@ -51,7 +51,7 @@
     src: url('../fonts/ZhengGeDianHei-16.ttf') format('truetype');
 }
 
-full-width {
+shift-down {
     display: inline-block;
     position: relative;
 }
@@ -537,12 +537,12 @@ bright {
     padding: 0;
     margin: 0;
     font: inherit;
-    color: var(--color-light-cyan);
+    color: var(--color-light-blue);
     flex-shrink: 0;
 }
 
 .hyper-link-button:hover {
-    color: var(--color-cyan);
+    color: var(--color-light-cyan);
     cursor: pointer
 }
 
@@ -619,19 +619,19 @@ bright {
 
 .settings {
     position: absolute;
-    top: 64px;
-    left: 0;
-    width: 100%;
-    height: calc(100% - 64px);
-    min-width: var(--web-min-width);
-    min-height: calc(var(--web-min-height) - 64px);
-    background-color: var(--color-dark-gray);
-    color: var(--color-white);
+    top: calc(32px * (2 + 2));
+    left: calc(16px * 4);
+    width: calc(16px * 72);
+    height: calc(32px * 19);
+    background-color: var(--color-white);
+    color: var(--color-black);
     z-index: 9999;
-    display: none
+    display: none;
+    box-shadow: 32px 32px 0 0 var(--color-dark-gray);
 }
 
-.settings button {
+.settings button,
+.settings span {
     height: 32px;
     line-height: 32px;
 }
