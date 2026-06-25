@@ -31,7 +31,17 @@ async function resetCharsData(h) {
     setEmptyData(h);
 }
 
+function clickConfirmNo() {
+    const abandonDiv = document.getElementById('top-menu-bar-warning-area');
+    const existingNoBtn = abandonDiv.querySelector('#confirmNo');
+    if (existingNoBtn) {
+        existingNoBtn.click();
+    }
+
+}
+
 function askIsAbandon() {
+    clickConfirmNo()
     return new Promise((resolve) => {
         if (isProjDirty()) {
             const abandonDiv = document.getElementById('top-menu-bar-warning-area');
@@ -58,6 +68,7 @@ function askIsAbandon() {
 }
 
 function showError(message) {
+    clickConfirmNo()
     const errorDiv = document.getElementById('top-menu-bar-warning-area');
     errorDiv.innerHTML = `
         <span style="color: var(--color-red)">&nbsp;* Error: ${message}</span>
@@ -514,8 +525,8 @@ function closeHelp() {
 }
 
 function changeTab(tab) {
+    clickConfirmNo()
     const warningDiv = document.getElementById('top-menu-bar-warning-area');
-    const previewDiv = document.getElementById('preview');
 
     const confirmNoBtn = warningDiv ? warningDiv.querySelector('#confirmNo') : null;
     if (confirmNoBtn) {
