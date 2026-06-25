@@ -87,10 +87,31 @@ function menuPreviewFont() {
     const previewDiv = document.getElementById('preview');
     const settingsDiv = document.getElementById('settings');
 
-    if (isPreviewOpen()) previewDiv.style.display = 'none';
-    else previewDiv.style.display = 'block'
+    if (isPreviewOpen()) {
+        editorData.page = 'editor';
+        previewDiv.style.display = 'none';
+    } else {
+        editorData.page = 'preview';
+        previewDiv.style.display = 'block'
+    }
 
     settingsDiv.style.display = 'none'
+}
+
+function menuSettings() {
+    const previewDiv = document.getElementById('preview');
+    const settingsDiv = document.getElementById('settings');
+
+    previewDiv.style.display = 'none'
+
+    if (isSettingOpen()) {
+        editorData.page = 'editor';
+        settingsDiv.style.display = 'none';
+    } else {
+        editorData.page = 'setting';
+        settingsDiv.style.display = 'block'
+        updateSetting(settingsDiv);
+    }
 }
 
 function menuRenameFont() {

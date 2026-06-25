@@ -1,32 +1,20 @@
-let editorData = {
-    about: {
-        version: '0.2.1',
-        github: 'https://github.com/Sennoma-Nn/Vga-Font-Editor-Online'
-    },
-    tab: 0,
-    tabsData: [
-        {
-            name: 'UNTITLED.RAW',
-            index: 0,
-            changedData: '',
-            mode: 'normal',
-            codePage: '437',
-            fontInfo: {
-                height: 16,
-                data: []
-            }
-        }
-    ],
-    inputmode: 'normal',
-    stringInput: '',
-    clipboard: {
-        data: '',
-        height: NaN
-    },
-    setting: {
-        showHelp: true,
-        metaKey: 'alt'
+function setEmptyData(h, tab) {
+    setFontData('height', h, tab);
+
+    const emptyData = getEmptyData(h);
+
+    if (isNaN(editorData.clipboard.height)) {
+        editorData.clipboard.data = emptyData;
+        editorData.clipboard.height = h;
     }
+
+    for (let i = 0; i <= 255; i++) {
+        getFontData('data', tab)[i] = emptyData;
+    }
+
+    openChar(getTabData('index'), true);
+    updateAllPreviews();
+    updatePreviewCanvas()
 }
 
 async function resetCharsData(h) {
@@ -401,18 +389,6 @@ function updatePreviewCanvas() {
     drawArr(ctx, testBlock, 33, 16, fontHeight);
 }
 
-function menuSettings() {
-    const previewDiv = document.getElementById('preview');
-    const settingsDiv = document.getElementById('settings');
-
-    previewDiv.style.display = 'none'
-
-    if (isSettingOpen()) settingsDiv.style.display = 'none';
-    else settingsDiv.style.display = 'block'
-
-    updateSetting(settingsDiv);
-}
-
 function updateSetting(settingsDiv) {
     const showHelp = editorData.setting.showHelp;
     const metaKey = editorData.setting.metaKey;
@@ -553,7 +529,7 @@ function changeTab(tab) {
     openChar(getTabData('index'), false, true);
     updateTabs();
 
-    if (!(previewDiv.style.display === 'none' || previewDiv.style.display === '')) {
+    if (isPreviewOpen()) {
         updatePreviewCanvas();
     }
 }
@@ -568,16 +544,7 @@ function addTab() {
 
     editorData.tabsData = [
         ...editorData.tabsData,
-        {
-            name: 'UNTITLED.RAW',
-            index: 0,
-            changedData: '',
-            mode: 'normal',
-            fontInfo: {
-                height: 16,
-                data: []
-            }
-        }
+        structuredClone(emptyTabData)
     ];
 
     setEmptyData(16, newIndex);
