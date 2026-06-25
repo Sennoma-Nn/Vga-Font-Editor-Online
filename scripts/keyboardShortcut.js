@@ -167,6 +167,7 @@ function key2Symbol(k) {
         case 'ARROWDOWN': return '▼';
         case 'ARROWLEFT': return '◄';
         case 'ARROWRIGHT': return '►';
+        case 'ESCAPE': return 'ESC';
         default: return k;
     }
 }

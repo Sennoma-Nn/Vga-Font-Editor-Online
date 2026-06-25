@@ -424,6 +424,12 @@ function updateSetting(settingsDiv) {
                 ${lang('MetaKeyIs')}: ${metaKey === 'alt' ? lang('AltKey') : metaText}
             </button>
         </span>
+
+        <span style="position: absolute; bottom: calc(32px * 1); right: 16px">
+            <button class="menu-button" onclick="menuSettings()">
+                ${lang('CloseSettings')}
+            </button>
+        </span>
     `
 }
 

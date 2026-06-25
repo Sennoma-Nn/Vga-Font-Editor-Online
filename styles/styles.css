@@ -452,10 +452,10 @@ bright {
     background-color: var(--color-light-blue);
 }
 
-#glyph-dropdown-menu .menu-item:hover > bright,
-#transform-dropdown-menu .menu-item:hover > bright,
-#shift-dropdown-menu .menu-item:hover > bright,
-#change-dropdown-menu .menu-item:hover > bright {
+#glyph-dropdown-menu .menu-item:hover>bright,
+#transform-dropdown-menu .menu-item:hover>bright,
+#shift-dropdown-menu .menu-item:hover>bright,
+#change-dropdown-menu .menu-item:hover>bright {
     color: var(--color-brown);
 }
 
@@ -584,8 +584,8 @@ bright {
     background-color: var(--color-light-gray);
 }
 
-.menu-item:hover > bright,
-.menu-item.submenu-open > bright {
+.menu-item:hover>bright,
+.menu-item.submenu-open>bright {
     color: var(--color-yellow);
 }
 
@@ -595,12 +595,12 @@ bright {
     color: var(--color-white);
 }
 
-.menu-item:active:not(:has(.menu-item:active)) > bright,
-.menu-item.pressed > bright {
+.menu-item:active:not(:has(.menu-item:active))>bright,
+.menu-item.pressed>bright {
     color: var(--color-yellow);
 }
 
-.menu-item.has-submenu > .submenu {
+.menu-item.has-submenu>.submenu {
     display: none;
     position: absolute;
     left: 100%;
@@ -612,9 +612,20 @@ bright {
     white-space: nowrap;
 }
 
-.menu-item.has-submenu.submenu-open > .submenu {
+.menu-item.has-submenu.submenu-open>.submenu {
     display: block;
     box-shadow: 32px 32px 0 0 var(--color-dark-gray);
+}
+
+.mask {
+    z-index: 30000;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background-color: #00000000;
+    display: none;
 }
 
 .settings {
@@ -625,7 +636,7 @@ bright {
     height: calc(32px * 19);
     background-color: var(--color-white);
     color: var(--color-black);
-    z-index: 9999;
+    z-index: 30001;
     display: none;
     box-shadow: 32px 32px 0 0 var(--color-dark-gray);
 }

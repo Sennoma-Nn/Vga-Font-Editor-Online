@@ -101,15 +101,18 @@ function menuPreviewFont() {
 function menuSettings() {
     const previewDiv = document.getElementById('preview');
     const settingsDiv = document.getElementById('settings');
+    const maskDiv = document.getElementById('mask');
 
     previewDiv.style.display = 'none'
 
     if (isSettingOpen()) {
         editorData.page = 'editor';
         settingsDiv.style.display = 'none';
+        maskDiv.style.display = 'none';
     } else {
         editorData.page = 'setting';
         settingsDiv.style.display = 'block'
+        maskDiv.style.display = 'block';
         updateSetting(settingsDiv);
     }
 }
