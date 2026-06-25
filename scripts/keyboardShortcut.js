@@ -1,6 +1,8 @@
 let activePressedBtn = null;
 
 document.addEventListener('keydown', (e) => {
+    if (editorData.page === 'preview') return;
+
     if (editorData.inputmode === 'name') {
         e.preventDefault();
         const k = e.key;
@@ -66,12 +68,16 @@ document.addEventListener('keydown', (e) => {
 
     const k = key2Symbol(e.key.toUpperCase());
 
-    const openMenus = document.querySelectorAll('.dropdown-menu.show');
     let scope = document;
-    if (openMenus.length) {
-        const lastMenu = openMenus[openMenus.length - 1];
-        const submenus = lastMenu.querySelectorAll('.submenu-open');
-        scope = submenus.length ? submenus[submenus.length - 1] : lastMenu;
+    if (editorData.page !== 'setting') {
+        const openMenus = document.querySelectorAll('.dropdown-menu.show');
+        if (openMenus.length) {
+            const lastMenu = openMenus[openMenus.length - 1];
+            const submenus = lastMenu.querySelectorAll('.submenu-open');
+            scope = submenus.length ? submenus[submenus.length - 1] : lastMenu;
+        }
+    } else {
+        scope = document.getElementById('settings') || document;
     }
 
     const btn = Array.from(scope.querySelectorAll('button, .menu-item'))
@@ -92,6 +98,8 @@ document.addEventListener('keydown', (e) => {
 });
 
 document.addEventListener('keyup', (e) => {
+    if (editorData.page === 'preview') return;
+
     if (editorData.inputmode === 'goto' || editorData.inputmode === 'name') return;
 
     const k = key2Symbol(e.key.toUpperCase());
