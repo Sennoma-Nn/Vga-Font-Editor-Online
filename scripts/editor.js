@@ -4,7 +4,6 @@ let editorData = {
         github: 'https://github.com/Sennoma-Nn/Vga-Font-Editor-Online'
     },
     tab: 0,
-    menuMode: 'normal',
     tabsData: [
         {
             name: 'UNTITLED.RAW',
@@ -28,25 +27,6 @@ let editorData = {
         showHelp: true,
         metaKey: 'alt'
     }
-}
-
-function setEmptyData(h, tab) {
-    setFontData('height', h, tab);
-
-    const emptyData = getEmptyData(h);
-
-    if (isNaN(editorData.clipboard.height)) {
-        editorData.clipboard.data = emptyData;
-        editorData.clipboard.height = h;
-    }
-
-    for (let i = 0; i <= 255; i++) {
-        getFontData('data', tab)[i] = emptyData;
-    }
-
-    openChar(getTabData('index'), true);
-    updateAllPreviews();
-    updatePreviewCanvas()
 }
 
 async function resetCharsData(h) {
@@ -170,156 +150,37 @@ async function openFontFromURL(url) {
     }
 }
 
-async function menuOpenFont() {
-    if (isDirty()) {
-        updateTitle(true);
-        return;
-    }
-
-    setTabData('mode', 'normal');
-
-    const proceed = await askIsAbandon();
-    if (!proceed) return;
-
-    const fileInput = document.getElementById('open-font-input');
-    fileInput.click();
-
-    fileInput.onchange = async (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        const buffer = await file.arrayBuffer();
-        const uint8 = new Uint8Array(buffer);
-
-        if (!parseFontData(uint8)) return;
-
-        setTabData('name', file.name);
-        updateTabs()
-
-        fileInput.value = '';
-    };
-}
-
-async function menuSaveFont() {
-    if (isDirty()) {
-        updateTitle(true);
-        return;
-    }
-
-    setTabData('mode', 'normal');
-
-    const totalBytes = 256 * getFontData('height');
-    const byteArray = new Uint8Array(totalBytes);
-
-    for (let i = 0; i < 256; i++) {
-        const charData = getFontData('data')[i];
-        for (let row = 0; row < getFontData('height'); row++) {
-            const rowString = charData.substring(row * 8, (row + 1) * 8);
-            byteArray[i * getFontData('height') + row] = parseInt(rowString, 2);
-        }
-    }
-
-    if ('showSaveFilePicker' in window) {
-        try {
-            const opts = {
-                suggestedName: getTabData('name'),
-                types: [{
-                    description: 'VGA Bitmap Font File',
-                    accept: { 'application/octet-stream': ['.RAW'] }
-                }]
-            };
-            const fileHandle = await window.showSaveFilePicker(opts);
-            const writable = await fileHandle.createWritable();
-            await writable.write(byteArray);
-            await writable.close();
-        } catch (err) {
-            if (err.name !== 'AbortError') {
-                console.error(err);
-            }
-        }
-        return;
-    }
-
-    const blob = new Blob([byteArray], { type: 'application/octet-stream' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-
-    link.href = url;
-    link.download = getTabData('name');
-
-    document.body.appendChild(link);
-    link.click();
-
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-}
-
-function menuPreviewFont() {
-    updatePreviewCanvas();
-    const previewDiv = document.getElementById('preview');
-    const settingsDiv = document.getElementById('settings');
-
-    if (isPreviewOpen()) previewDiv.style.display = 'none';
-    else previewDiv.style.display = 'block'
-
-    settingsDiv.style.display = 'none'
-}
-
-function menuRenameFont() {
-    if (editorData.inputmode === 'name') {
-        editorData.inputmode = 'normal';
-        updateTabs();
-        return;
-    }
-
-    if (editorData.inputmode === 'goto') cancelGoto();
-
-    editorData.inputmode = 'name';
-    editorData.stringInput = getTabData('name');
-    updateTabs();
-}
-
-function debug() {
-    console.log(editorData);
-}
-
 function updateMenu() {
     const menuBarButtonArea = document.getElementById('top-menu-bar-button-area');
 
-    let actionButtons = '';
+    let actionButtons = `
+        <button class="menu-button" onclick="menuManager.toggle('reset-dropdown-menu', this)">${lang('Reset')}</button>
+        <div id="reset-dropdown-menu" class="dropdown-menu">
+            <ul>
+                <span style="color: var(--color-light-gray)">&nbsp;${lang('Size')}:</span>
+                <li class="menu-item" onclick="resetResetButton(16)">8x1<bright>6</bright></li>
+                <li class="menu-item" onclick="resetResetButton(14)">8x1<bright>4</bright></li>
+                <li class="menu-item" onclick="resetResetButton(8)">8x<bright>8</bright></li>
 
-    switch (editorData.menuMode) {
-        case 'normal':
-            actionButtons = `
-                <button class="menu-button" onclick="menuManager.toggle('reset-dropdown-menu', this)">${lang('Reset')}</button>
-                <div id="reset-dropdown-menu" class="dropdown-menu">
-                    <ul>
-                        <span style="color: var(--color-light-gray)">&nbsp;${lang('Size')}:</span>
-                        <li class="menu-item" onclick="resetResetButton(16)">8x1<bright>6</bright></li>
-                        <li class="menu-item" onclick="resetResetButton(14)">8x1<bright>4</bright></li>
-                        <li class="menu-item" onclick="resetResetButton(8)">8x<bright>8</bright></li>
+                <br>
 
-                        <br>
-
-                        <li class="menu-item has-submenu" onclick="toggleSubmenu(this)">
-                            ${lang('Templates')} ►
-                            <ul class="submenu">
-                                <li class="menu-item" onclick="event.stopPropagation(); loadTemplatesFrom('VGA-ROM.F16')"><bright>1</bright> VGA-ROM.F16</li>
-                                <li class="menu-item" onclick="event.stopPropagation(); loadTemplatesFrom('VGA-ROM.F14')"><bright>2</bright> VGA-ROM.F14</li>
-                                <li class="menu-item" onclick="event.stopPropagation(); loadTemplatesFrom('VGA-ROM.F08')"><bright>3</bright> VGA-ROM.F08</li>
-                                <li class="menu-item" onclick="event.stopPropagation(); loadTemplatesFrom('QUADBM.F08')"><bright>4</bright> QUADBM.F08</li>
-                            </ul>
-                        </li>
+                <li class="menu-item has-submenu" onclick="toggleSubmenu(this)">
+                    ${lang('Templates')} ►
+                    <ul class="submenu">
+                        <li class="menu-item" onclick="event.stopPropagation(); loadTemplatesFrom('VGA-ROM.F16')"><bright>1</bright> VGA-ROM.F16</li>
+                        <li class="menu-item" onclick="event.stopPropagation(); loadTemplatesFrom('VGA-ROM.F14')"><bright>2</bright> VGA-ROM.F14</li>
+                        <li class="menu-item" onclick="event.stopPropagation(); loadTemplatesFrom('VGA-ROM.F08')"><bright>3</bright> VGA-ROM.F08</li>
+                        <li class="menu-item" onclick="event.stopPropagation(); loadTemplatesFrom('QUADBM.F08')"><bright>4</bright> QUADBM.F08</li>
                     </ul>
-                </div>
-                <button class="menu-button" onclick="menuRenameFont()">${lang('Rename')}</button>
-                <button class="menu-button" onclick="menuOpenFont()">${lang('Open')}</button>
-                <button class="menu-button" onclick="menuSaveFont()">${lang('Save')}</button>
-                <button class="menu-button" onclick="menuPreviewFont()">${lang('Preview')}</button>
-                <button class="menu-button" onclick="menuSettings()">${lang('Settings')}</button>
-            `;
-            break;
-    }
+                </li>
+            </ul>
+        </div>
+        <button class="menu-button" onclick="menuRenameFont()">${lang('Rename')}</button>
+        <button class="menu-button" onclick="menuOpenFont()">${lang('Open')}</button>
+        <button class="menu-button" onclick="menuSaveFont()">${lang('Save')}</button>
+        <button class="menu-button" onclick="menuPreviewFont()">${lang('Preview')}</button>
+        <button class="menu-button" onclick="menuSettings()">${lang('Settings')}</button>
+    `;
 
     menuBarButtonArea.innerHTML = actionButtons;
 }
@@ -423,8 +284,6 @@ function updateTitle(isWarning = false) {
         ${descriptions}${actionButtons}${saveTexts}
     `;
 }
-
-const getCSSVar = (varName) => getComputedStyle(document.documentElement).getPropertyValue(`--${varName}`).trim();
 
 function drawChar(ctx, i, x, y, fh) {
     const charData = getFontData('data')[i];
@@ -581,175 +440,6 @@ function updateSetting(settingsDiv) {
     `
 }
 
-function toggleMetaKey() {
-    editorData.setting.metaKey = editorData.setting.metaKey === 'alt' ? 'meta' : 'alt';
-    localStorage.setItem('metaKey', editorData.setting.metaKey);
-
-    const settingsDiv = document.getElementById('settings');
-    updateSetting(settingsDiv);
-}
-
-function toggleShowHelp() {
-    editorData.setting.showHelp = !editorData.setting.showHelp;
-    localStorage.setItem('showHelp', editorData.setting.showHelp);
-
-    const settingsDiv = document.getElementById('settings');
-    updateSetting(settingsDiv);
-}
-
-function bakcMainMenu() {
-    editorData.menuMode = 'normal';
-    updateMenu();
-}
-
-function viewOnGitHub() {
-    window.open(editorData.about.github);
-}
-
-function resetResetButton(h) {
-    resetCharsData(h);
-    updateMenu();
-}
-
-function loadTemplatesFrom(name) {
-    openFontFromURL(`./fontTemplates/${name}`)
-    updateMenu();
-}
-
-function transformFlipHorizontal() {
-    const h = getFontData('height');
-    let newData = "";
-
-    for (let row = 0; row < h; row++) {
-        let start = row * 8;
-        let rb = getTabData('changedData').substring(start, start + 8);
-        let fr = rb.split('').reverse().join('');
-        newData += fr;
-    }
-
-    setTabData('changedData', newData);
-    renderCanvas();
-}
-
-function transformFlipVertical() {
-    const h = getFontData('height');
-    let r = [];
-
-    for (let row = 0; row < h; row++) {
-        let start = row * 8;
-        r.push(getTabData('changedData').substring(start, start + 8));
-    }
-
-    r.reverse();
-    let newData = r.join('');
-
-    setTabData('changedData', newData);
-    renderCanvas();
-}
-
-function shiftUp() {
-    const h = getFontData('height');
-    let r = [];
-
-    for (let i = 0; i < h; i++) {
-        r.push(getTabData('changedData').substring(i * 8, (i + 1) * 8));
-    }
-
-    r.shift();
-    r.push("0".repeat(8));
-
-    setTabData('changedData', r.join(''));
-    renderCanvas();
-}
-
-function shiftDown() {
-    const h = getFontData('height');
-    let r = [];
-
-    for (let i = 0; i < h; i++) {
-        r.push(getTabData('changedData').substring(i * 8, (i + 1) * 8));
-    }
-
-    r.pop();
-    r.unshift("0".repeat(8));
-
-    setTabData('changedData', r.join(''));
-    renderCanvas();
-}
-
-function shiftLeft() {
-    const h = getFontData('height');
-    let r = [];
-
-    for (let i = 0; i < h; i++) {
-        let s = getTabData('changedData').substring(i * 8, (i + 1) * 8).slice(1) + "0";
-        r.push(s);
-    }
-
-    setTabData('changedData', r.join(''));
-    renderCanvas();
-}
-
-function shiftRight() {
-    const h = getFontData('height');
-    let r = [];
-
-    for (let i = 0; i < h; i++) {
-        let s = "0" + getTabData('changedData').substring(i * 8, (i + 1) * 8).slice(0, -1);
-        r.push(s);
-    }
-
-    setTabData('changedData', r.join(''));
-    renderCanvas();
-}
-
-function layerCopy() {
-    if (isEditing()) {
-        editorData.clipboard.data = getTabData('changedData');
-    } else {
-        editorData.clipboard.data = getFontData('data')[getTabData('index')];
-    }
-    editorData.clipboard.height = getFontData('height');
-}
-
-function layerPaste() {
-    if (!isEditing()) {
-        setTabData('mode', 'edit');
-    }
-
-    let layerHeight = getFontData('height');
-
-    if (layerHeight === editorData.clipboard.height) {
-        setTabData('changedData', editorData.clipboard.data);
-        renderCanvas();
-        updateTitle();
-    } else if (layerHeight > editorData.clipboard.height) {
-        let newData = editorData.clipboard.data.padEnd(8 * layerHeight, '0');
-
-        setTabData('changedData', newData);
-        renderCanvas();
-        updateTitle();
-    } else {
-        let truncated = editorData.clipboard.data.slice(0, 8 * layerHeight);
-
-        setTabData('changedData', truncated);
-        renderCanvas();
-        updateTitle();
-    }
-}
-
-function layerClear() {
-    setTabData('changedData', getEmptyData());
-    renderCanvas();
-}
-
-const reverse = data => data.replace(/[01]/g, (match) => (match === '1' ? '0' : '1'));
-
-function transformReverse() {
-    setTabData('changedData', reverse(getTabData('changedData')));
-    renderCanvas();
-}
-
 function highlightCharButton(index, updateHighlight) {
     const currentBtn = document.getElementById(`openChar${index}`);
 
@@ -840,119 +530,11 @@ function pixelInput(i, e) {
     e.target.style.backgroundColor = newValue === "1" ? 'var(--color-black)' : 'var(--color-white)';
 }
 
-function editChar() {
-    setTabData('mode', 'edit');
-    setTabData('changedData', getFontData('data')[getTabData('index')]);
-    renderCanvas();
-    updateTitle();
-}
-
-function saveChanges() {
-    getFontData('data')[getTabData('index')] = getTabData('changedData');
-    setTabData('mode', 'normal');
-
-    updatePreviewCanvass(getTabData('index'));
-    renderCanvas();
-    updateTitle();
-}
-
-function undoChanges() {
-    setTabData('mode', 'normal');
-    setTabData('changedData', "");
-    renderCanvas();
-    updateTitle();
-}
-
 function closeHelp() {
     const helpDiv = document.getElementById('help-text');
     if (helpDiv) {
         helpDiv.style.display = 'none';
     }
-}
-
-function updataGoto() {
-    if (editorData.inputmode !== 'goto') {
-        document.getElementById('string-input').innerHTML = '__';
-        return;
-    }
-
-    const gotoInputSpan = document.getElementById('string-input');
-    const val = editorData.stringInput;
-
-    if (val.length === 0) gotoInputSpan.innerHTML = '<bright>_</bright>_';
-    else if (val.length === 1) gotoInputSpan.innerHTML = val + '<bright>_</bright>';
-    else gotoInputSpan.innerHTML = val.slice(0, 2);
-}
-
-function cancelGoto() {
-    document.getElementById('string-input').innerHTML = '__';
-
-    editorData.inputmode = 'normal';
-    editorData.stringInput = '';
-    updataGoto();
-}
-
-function gotoJump() {
-    if (isDirty()) {
-        updateTitle(true);
-        return;
-    }
-
-    document.getElementById('string-input').innerHTML = '__';
-
-    const val = editorData.stringInput;
-
-    if (val.includes('+')) {
-        const index = getTabData('index');
-        const step = val == '++' ? 4 : 1;
-        cancelGoto();
-        openChar(Math.min(index + step, 0xFF), true);
-        return;
-    }
-
-    if (val.includes('-')) {
-        const index = getTabData('index');
-        const step = val == '--' ? 4 : 1;
-        cancelGoto();
-        openChar(Math.max(index - step, 0), true);
-        return;
-    }
-
-    if (val.length <= 2) {
-        const nweIndex = parseInt(val, 16);
-        if (!isNaN(nweIndex) && nweIndex >= 0 && nweIndex <= 255) {
-            cancelGoto();
-            openChar(nweIndex, true);
-            return;
-        }
-    }
-    cancelGoto();
-}
-
-function gotoInputStart() {
-    if (editorData.inputmode === 'goto') {
-        editorData.inputmode = 'normal';
-        updateTabs();
-        updataGoto();
-        return;
-    }
-
-    if (editorData.inputmode === 'name') {
-        editorData.inputmode = 'normal';
-        updateTabs();
-    }
-
-    document.getElementById('string-input').innerHTML = '__';
-
-    if (isDirty()) {
-        updateTitle(true);
-        return;
-    }
-
-    setTabData('mode', 'normal');
-    editorData.inputmode = 'goto';
-    editorData.stringInput = '';
-    updataGoto();
 }
 
 function changeTab(tab) {

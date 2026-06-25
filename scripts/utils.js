@@ -37,6 +37,8 @@ function escapeHTML(str) {
     );
 }
 
+const getCSSVar = (varName) => getComputedStyle(document.documentElement).getPropertyValue(`--${varName}`).trim();
+
 let getTabData = (data, tab = editorData.tab) => {
     return editorData.tabsData[tab][data];
 }
@@ -89,3 +91,24 @@ const isAnyProjDirty = () => {
 };
 
 const getEmptyData = (h = getFontData('height')) => "0".repeat(8 * h)
+
+const reverse = data => data.replace(/[01]/g, (match) => (match === '1' ? '0' : '1'));
+
+function setEmptyData(h, tab) {
+    setFontData('height', h, tab);
+
+    const emptyData = getEmptyData(h);
+
+    if (isNaN(editorData.clipboard.height)) {
+        editorData.clipboard.data = emptyData;
+        editorData.clipboard.height = h;
+    }
+
+    for (let i = 0; i <= 255; i++) {
+        getFontData('data', tab)[i] = emptyData;
+    }
+
+    openChar(getTabData('index'), true);
+    updateAllPreviews();
+    updatePreviewCanvas()
+}
