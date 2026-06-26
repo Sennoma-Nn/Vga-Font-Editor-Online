@@ -21,7 +21,7 @@
 
     const container = document.querySelector('.canvars-and-help');
     const showHelp = (localStorage.getItem('showHelp') ?? 'true') === 'true';
-    const metaKey = (localStorage.getItem('metaKey') ?? (isMacOS() ? 'meta' : 'alt')) === 'alt' ? 'alt' : 'meta';
+    const metaKey = (localStorage.getItem('metaKey') ?? 'alt') === 'alt' ? 'alt' : 'meta';
 
     editorData.setting.showHelp = showHelp;
     editorData.setting.metaKey = metaKey;

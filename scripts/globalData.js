@@ -12,7 +12,7 @@ const emptyTabData = {
 
 let editorData = {
     about: {
-        version: '0.2.2',
+        version: '0.2.3',
         github: 'https://github.com/Sennoma-Nn/Vga-Font-Editor-Online'
     },
     tab: 0,

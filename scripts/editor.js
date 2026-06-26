@@ -404,6 +404,7 @@ function updateSetting(settingsDiv) {
     const showHelp = editorData.setting.showHelp;
     const metaKey = editorData.setting.metaKey;
     const metaText = isMacOS() ? lang('CmdKey') : lang('MetaKey')
+    const AltText = isMacOS() ? lang('OptKey') : lang('AltKey')
     settingsDiv.innerHTML = `
         <span style="position: absolute; top: calc(32px * 1); left: 32px">
             VGA FONT EDITOR ONLINE -- V${editorData.about.version}
@@ -421,7 +422,7 @@ function updateSetting(settingsDiv) {
 
         <span style="position: absolute; top: calc(32px * 5); left: 16px">
             <button class="menu-button" onclick="toggleMetaKey()">
-                ${lang('MetaKeyIs')}: ${metaKey === 'alt' ? lang('AltKey') : metaText}
+                ${lang('MetaKeyIs')}: ${metaKey === 'alt' ? AltText : metaText}
             </button>
         </span>
 
