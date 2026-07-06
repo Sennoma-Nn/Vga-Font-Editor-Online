@@ -398,6 +398,9 @@ function updatePreviewCanvas() {
     let testBlock = [0xB0, 0xB0, 0xB0, 0xB0, 0x20, 0x20, 0xB1, 0xB1, 0xB1, 0xB1, 0x20, 0x20, 0xB2, 0xB2, 0xB2, 0xB2];
     drawArr(ctx, testBlock, 33, 15, fontHeight);
     drawArr(ctx, testBlock, 33, 16, fontHeight);
+
+    const closeButton = document.getElementById('close-preview')
+    closeButton.innerHTML = closeText = lang('EscClose')
 }
 
 function updateSetting(settingsDiv) {
@@ -428,7 +431,7 @@ function updateSetting(settingsDiv) {
 
         <span style="position: absolute; bottom: calc(32px * 1); right: 16px">
             <button class="menu-button" onclick="menuSettings()">
-                ${lang('CloseSettings')}
+                ${lang('EscClose')}
             </button>
         </span>
     `

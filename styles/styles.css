@@ -647,7 +647,9 @@ bright {
 }
 
 .settings button,
-.settings span {
+.preview button,
+.settings span,
+.preview span {
     height: 32px;
     line-height: 32px;
 }

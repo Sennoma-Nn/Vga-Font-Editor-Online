@@ -1,8 +1,6 @@
 let activePressedBtn = null;
 
 document.addEventListener('keydown', (e) => {
-    if (editorData.page === 'preview') return;
-
     if (editorData.inputmode === 'name') {
         e.preventDefault();
         const k = e.key;
@@ -69,7 +67,30 @@ document.addEventListener('keydown', (e) => {
     const k = key2Symbol(e.key.toUpperCase());
 
     let scope = document;
-    if (editorData.page !== 'setting') {
+    if (editorData.page === 'preview') {
+        const topBar = document.getElementById('top-menu-bar');
+        const preview = document.getElementById('preview');
+        const btns = [];
+
+        btns.push(...topBar.querySelectorAll('button, .menu-item'));
+        btns.push(...preview.querySelectorAll('button, .menu-item'));
+
+        const btn = btns.find(b => {
+            const bk = getBrightKey(b);
+            return bk && matchBrightKey(bk, k, e);
+        });
+
+        if (btn) {
+            btn.classList.add('pressed');
+            activePressedBtn = btn;
+            e.preventDefault();
+            return;
+        }
+
+        if (e.ctrlKey || e.altKey || e.metaKey) e.preventDefault();
+
+        return;
+    } else if (editorData.page !== 'setting') {
         const openMenus = document.querySelectorAll('.dropdown-menu.show');
         if (openMenus.length) {
             const lastMenu = openMenus[openMenus.length - 1];
@@ -98,8 +119,6 @@ document.addEventListener('keydown', (e) => {
 });
 
 document.addEventListener('keyup', (e) => {
-    if (editorData.page === 'preview') return;
-
     if (editorData.inputmode === 'goto' || editorData.inputmode === 'name') return;
 
     const k = key2Symbol(e.key.toUpperCase());
