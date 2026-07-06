@@ -338,11 +338,14 @@ function updatePreviewCanvas() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     for (let i = 0; i < 256; i++) {
-        const y = Math.floor(i / 64);
-        const x = i % 64;
+        const g = Math.floor(i / 8);
+        const col = Math.floor(g / 4);
+        const row = g % 4;
+        const k = i % 8;
+        const x = col * 8 + k;
         const sx = Math.floor(x / 8) * 2;
         const tx = 2 + x + sx;
-        const r = 2 + y;
+        const r = 2 + row;
 
         drawChar(ctx, i, tx, r, fontHeight)
     }
